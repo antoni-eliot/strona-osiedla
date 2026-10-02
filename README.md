@@ -165,3 +165,40 @@ Ograniczenia, o których warto wiedzieć:
 
 Identyfikator gracza (`osiedle_frog_pid`) trzymany jest w `localStorage`, żeby po odświeżeniu strony wejść do tego samego stawu tym samym tokenem, a nie jako nowy gość. Serwer odrzuca mapę, gdy siatka nie zgadza się z rozmiarem, jest za duża albo zawiera niedozwolone znaki, i przycina liczbę graczy, botów i kolejek skoków.
 
+
+## 🧱 Spike Prime — programowanie modelu blokami
+
+Zakładka **🎮 → Spike Prime**. Budujesz model z elementów LEGO, programujesz go
+klocki (jak w Scratchu) i od razu widzisz, co robi na arenie. Wszystko działa
+na jednej stronie — bez backendu.
+
+### Model
+- **11 elementów** do podpięcia w **5 portach (A–E)**: silnik duży 🛞, silnik średni ⚙️, przekładnia zębatata 🦷, czujnik odległości 📡, czujnik koloru 🎨, czujnik siły 💥, czujnik dotyku 👆, lampka LED 💡, przycisk 🔘, głośnik 🔊, czujnik światła ☀️
+- Silnik na **porcie A lub B** napędza koło — robot z dwoma takimi silnikami skręca różnicowo (taniec tankowy)
+- Elementy zaklada się i zdejmuje kliknięciem w port; model jest zapisywany w `localStorage` (`osiedle_spike_model`)
+
+### Klocki
+- Kategorie: **Zdarzenia**, **Silniki**, **Światło i dźwięk**, **Czujniki**, **Kontrola**, **Operatory**
+- **Czapki** (zdarzenia): Zielona flaga 🟢, przycisk huba, odległość `< N cm`, kolor, ciemność, siła, komunikat
+- **Klocki C**: Powtórz, Powtarzaj w nieskończoność, Jeżeli / Jeżeli–w przeciwnym razie, Dopóki
+- **Operatory** `+ − × ÷`, `porównania`, `i / lub / nie`, losowo — **gniazda matematyczne przyjmują reportery**, więc da się ułożyć `odległość < 20`
+- Gniazda okrągłe (reportersy i warunki) przyjmują się w gniazdach innych klocków; **puste gniazdo matematyczne to pole z liczbą**
+- Klocki przeciąga się myszą z palety do warsztatu; wskazują się w pionie, wsuwają w jamy klocków C i w gniazda. **Prawy przycisk kasuje klocek**
+- Program jest zapisywany w `localStorage` (`osiedle_spike_scripts`)
+
+### Arena i symulacja
+- Arena **180 × 140 cm** z siatką co 20 cm; robot jedzie po różnych nawierzchniach (biały, kolorowe, ciemne — czujnik koloru i jasności to odczytują)
+- `▶️ Uruchom` / `⏹️ Zatrzymaj` / `🔄 Resetuj` / `🧹 Wyczyść` / `✨ Przykład`
+- **Przyciski huba są klikalne** — tak samo jak w programie (`przycisk huba`)
+- HUD pokazuje na żywo: pozycję, odległość, kolor, jasność, siłę, obroty kół i stan portów
+- **Tryb edycji areny** (`🗺`) pozwala zaznaczać i usuwać ściany, po których robot się zatrzymuje
+- `✨ Przykład` wczytuje dwa programy: **kwadrat** (ustaw moc → 4 × jedź i skręć 90° → światło i uśmiech) oraz **obserwator** (gdy przeszkoda bliżej niż 26 cm — cofnij i zapal czerwone)
+
+### Uruchomienie testów
+```bash
+npm install     # tylko do testów (jsdom)
+npm test
+```
+Testy uruchamiają prawdziwy `index.html` w jsdom i sprawdzają m.in., że kod po klocku
+C się wykonuje, wstawianie klocków nie gubi łańcucha, a każdy handler inline
+wskazuje na istniejącą funkcję.

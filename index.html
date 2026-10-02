@@ -8463,8 +8463,9 @@
     spikeHud();
   }
 
-  const spikeWheelIs = (p) => (p === 'A' || p === 'B') &&
-    (spikeModel.ports.A === 'motorL' || spikeModel.ports.B === 'motorL');
+  // koło jest tam, gdzie faktycznie podpięto silnik duży — inaczej rysowalibyśmy
+  // koło na pustym porcie, a robot z jednym silnikiem krężyłby się w miejscu
+  const spikeWheelIs = (p) => (p === 'A' || p === 'B') && spikeModel.ports[p] === 'motorL';
 
   function spikeUpdate(dt) {
     // obrót silników
