@@ -1580,6 +1580,277 @@
     transform: translateX(-50%);
     background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0) 70%);
   }
+
+  /* --- SPIKE PRIME: programowanie blokami --- */
+  /* Układ jak w Scratchu: paleta | skrypt | scena */
+  .spike-app {
+    display: grid;
+    grid-template-columns: 232px minmax(300px, 1fr) 356px;
+    gap: 12px;
+    align-items: start;
+    margin-top: 10px;
+  }
+  .spike-col {
+    background: var(--t-card, #f3f4f6);
+    border: 1px solid var(--t-border, #d1d5db);
+    border-radius: 12px;
+    padding: 10px;
+  }
+  .spike-col-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--t-muted, #6b7280);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  /* podzakładki palety (Elementy / Bloki) */
+  .spike-subtabs { display: flex; gap: 6px; margin-bottom: 10px; }
+  .spike-subtab {
+    flex: 1;
+    padding: 7px 6px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 9px;
+    border: 1px solid var(--t-border, #d1d5db);
+    background: var(--t-bg2, #ffffff);
+    color: var(--t-text, #111827);
+    cursor: pointer;
+  }
+  .spike-subtab.active { background: #002f34; border-color: #002f34; color: #fff; }
+
+  /* lista elementów modelu (hub + porty) */
+  .spike-parts { display: flex; flex-direction: column; gap: 8px; max-height: 430px; overflow-y: auto; }
+  .spike-part {
+    border: 1px solid var(--t-border, #d1d5db);
+    border-radius: 10px;
+    padding: 8px 9px;
+    background: var(--t-bg, #ffffff);
+  }
+  .spike-part-h { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; }
+  .spike-part-h .spike-ico { font-size: 17px; }
+  .spike-part-d { font-size: 10.5px; color: var(--t-muted, #6b7280); margin-top: 2px; line-height: 1.35; }
+  .spike-ports { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+  .spike-port {
+    width: 30px;
+    height: 26px;
+    padding: 0;
+    font-size: 11px;
+    font-weight: 800;
+    border-radius: 7px;
+    border: 1px solid #9ca3af;
+    background: #fff;
+    color: #374151;
+    cursor: pointer;
+  }
+  .spike-port:hover { background: #e5e7eb; }
+  .spike-port.filled { background: #002f34; border-color: #002f34; color: #fff; }
+  .spike-port.sel { outline: 3px solid #ff7a00; outline-offset: 1px; }
+  .spike-attached { display: flex; align-items: center; gap: 6px; margin-top: 7px; font-size: 11.5px; }
+  .spike-attached span { flex: 1; font-weight: 700; color: var(--t-text, #111827); }
+  .spike-detach {
+    border: none;
+    background: none;
+    color: #ef4444;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 2px 4px;
+  }
+
+  /* paleta bloków */
+  .spike-pal { max-height: 430px; overflow-y: auto; padding-right: 3px; }
+  .spike-cat { margin-bottom: 9px; }
+  .spike-cat-h {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--t-text, #111827);
+    margin-bottom: 5px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .spike-cat-dot { width: 11px; height: 11px; border-radius: 4px; flex: none; }
+  .spike-cat-h .spike-caret { font-size: 9px; color: var(--t-muted, #6b7280); }
+  .spike-cat-body { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+
+  /* --- klocki --- */
+  .spike-block {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    border-radius: 7px;
+    color: #fff;
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.2;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+  }
+  .spike-block.dragging { opacity: 0.45; }
+  .spike-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    padding: 7px 10px;
+  }
+  .spike-cat-ev { background: #d9822b; }
+  .spike-cat-mo { background: #2f6fd0; }
+  .spike-cat-li { background: #8b5cf6; }
+  .spike-cat-se { background: #0e9aa7; }
+  .spike-cat-ct { background: #d4a017; }
+  .spike-cat-op { background: #35a34a; }
+  .spike-hat { border-radius: 15px 15px 7px 7px; padding-top: 10px; }
+  .spike-cap { border-radius: 7px 7px 15px 15px; }
+  .spike-reporter { border-radius: 13px; padding: 5px 8px; }
+  .spike-boolean { border-radius: 13px; padding: 5px 9px; }
+  .spike-lbl { white-space: nowrap; }
+  .spike-in {
+    width: 46px;
+    padding: 3px 4px;
+    border: none;
+    border-radius: 7px;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-align: center;
+    color: #111827;
+    background: #fff;
+    outline: none;
+  }
+  .spike-sel {
+    padding: 3px 4px;
+    border: none;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #111827;
+    background: #fff;
+    outline: none;
+    cursor: pointer;
+  }
+  .spike-slot {
+    min-width: 40px;
+    min-height: 20px;
+    padding: 2px 5px;
+    border-radius: 11px;
+    background: rgba(0, 0, 0, 0.28);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .spike-slot.over { outline: 2px dashed #fff; }
+  .spike-slot > .spike-block { position: relative; }
+  /* pole z liczbą wewnątrz gniazda matematycznego */
+  .spike-num {
+    width: 46px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+  }
+  .spike-num:focus { text-decoration: underline; }
+
+  /* klocki typu C — jama na kolejne klocki */
+  .spike-mouth {
+    height: 9px;
+    margin: 1px 0 2px 14px;
+    border-left: 2px solid rgba(0, 0, 0, 0.22);
+    border-top: 2px solid rgba(0, 0, 0, 0.22);
+    border-top-left-radius: 9px;
+    background: rgba(0, 0, 0, 0.16);
+  }
+  .spike-foot {
+    height: 11px;
+    margin: 2px 0 3px 14px;
+    border-left: 2px solid rgba(0, 0, 0, 0.22);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.22);
+    border-bottom-left-radius: 9px;
+    background: rgba(0, 0, 0, 0.16);
+  }
+  .spike-body { position: relative; }
+
+  /* skrypty w warsztacie */
+  .spike-ws {
+    position: relative;
+    min-height: 430px;
+    max-height: 430px;
+    overflow: auto;
+    border-radius: 10px;
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.045) 1px, transparent 1px) 0 0 / 22px 22px,
+      linear-gradient(rgba(0, 0, 0, 0.045) 1px, transparent 1px) 0 0 / 22px 22px,
+      var(--t-bg2, #ffffff);
+    touch-action: none;
+  }
+  .spike-script { position: absolute; }
+  .spike-ghost {
+    position: absolute;
+    pointer-events: none;
+    z-index: 30;
+    opacity: 0.92;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+  }
+  .spike-ws-tip { font-size: 10.5px; color: var(--t-muted, #6b7280); margin-top: 6px; line-height: 1.4; }
+
+  /* scena / arena */
+  .spike-stage { position: relative; }
+  .spike-stage canvas { display: block; width: 100%; height: auto; border-radius: 9px; background: #f9fafb; }
+  .spike-hud {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+    margin-top: 8px;
+  }
+  .spike-read {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    font-size: 11px;
+    padding: 5px 8px;
+    border-radius: 8px;
+    background: var(--t-bg2, #ffffff);
+    border: 1px solid var(--t-border, #e5e7eb);
+  }
+  .spike-read b { font-variant-numeric: tabular-nums; color: #002f34; }
+  .spike-read.off { opacity: 0.45; }
+  .spike-matrix { display: flex; gap: 2px; }
+  .spike-matrix i {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: #d1d5db;
+    display: block;
+  }
+  .spike-bar { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+  .spike-model-hub {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px;
+    border: 1px solid var(--t-border, #d1d5db);
+    border-radius: 10px;
+    background: var(--t-bg, #ffffff);
+    margin-bottom: 8px;
+  }
+  .spike-model-hub .spike-ico { font-size: 26px; }
+  .spike-model-hub div { font-size: 11px; color: var(--t-muted, #6b7280); line-height: 1.4; }
+  .spike-model-hub strong { font-size: 12.5px; color: var(--t-text, #111827); display: block; }
+  .spike-legend { font-size: 10.5px; color: var(--t-muted, #6b7280); line-height: 1.45; }
+  .spike-legend b { color: var(--t-text, #111827); }
+  @media (max-width: 980px) {
+    .spike-app { grid-template-columns: 1fr; }
+    .spike-pal, .spike-parts, .spike-ws { max-height: 300px; min-height: 240px; }
+  }
 </style>
 </head>
 <body id="body">
@@ -2015,6 +2286,77 @@
             <button class="frog-btn alt" data-frog-fs onclick="frogFullscreen()">⛶ Pełny ekran</button>
           </div>
           <p class="controls">Maksymalny skok: 3 liście • myszka pokazuje kropki toru lotu, klik wykonuje skok • wskakuj na graczy, by zabrać ich jedzenie</p>
+        </div>
+        <div class="game-card game-wide" id="spikeCard">
+          <h4>🤖 Spike Prime — programuj robotem blokami</h4>
+          <p style="font-size:12px; margin:0 0 10px;">
+            Złóż model z elementów LEGO Spike Prime (hub, silniki, czujniki, lampki, przyciski),
+            a potem zaprogramuj go klocki — dokładnie jak w Scratchu — i zobacz model w akcji na arenie.
+          </p>
+
+          <div class="spike-bar">
+            <button class="frog-btn" onclick="spikeRun()">▶️ Uruchom</button>
+            <button class="frog-btn warn" onclick="spikeStop()">⏹ Zatrzymaj</button>
+            <button class="frog-btn alt" onclick="spikeReset()">🔄 Resetuj</button>
+            <button class="frog-btn alt" onclick="spikeClearScripts()">🧹 Wyczyść skrypty</button>
+            <button class="frog-btn alt" onclick="spikeExample()">✨ Przykład</button>
+            <button class="frog-btn alt" onclick="spikeOpenArena()">🗺 Arena</button>
+          </div>
+
+          <div class="spike-app">
+            <!-- PALETA: elementy modelu + klocki -->
+            <div class="spike-col">
+              <div class="spike-subtabs">
+                <button class="spike-subtab active" id="spikeSubParts" onclick="spikePaletteTab('parts')">🧩 Elementy</button>
+                <button class="spike-subtab" id="spikeSubBlocks" onclick="spikePaletteTab('blocks')">🧱 Klocki</button>
+              </div>
+
+              <!-- zakładka Elementy: budowanie modelu -->
+              <div id="spikePartsPane">
+                <div class="spike-model-hub">
+                  <span class="spike-ico">🧠</span>
+                  <div>
+                    <strong>Hub Spike Prime</strong>
+                    matryca LED 5×5 • 3 przyciski • głośnik • dioda • czujnik światła
+                  </div>
+                </div>
+                <div class="spike-parts" id="spikePartsList"></div>
+                <p class="spike-legend" style="margin-top:9px;">
+                  Kliknij <b>literę portu</b> przy elemencie, aby go podpiąć.
+                  Ten sam port może mieć tylko jeden element.
+                </p>
+              </div>
+
+              <!-- zakładka Klocki -->
+              <div id="spikeBlocksPane" class="hidden">
+                <div class="spike-pal" id="spikePalette"></div>
+                <p class="spike-legend" style="margin-top:8px;">
+                  Przeciągnij klocek do <b>skryptu</b> (pod innym klockiem), do <b>jamy</b> klocka C
+                  albo do <b>okrągłego gniazda</b>.
+                </p>
+              </div>
+            </div>
+
+            <!-- WARSZTAT: skrypty -->
+            <div class="spike-col">
+              <div class="spike-col-title">🧱 Skrypty programu</div>
+              <div class="spike-ws" id="spikeWs"></div>
+              <p class="spike-legend" id="spikeWsTip">
+                Podłącz <b>🟢 Gdy naciśnięty START</b>, żeby skrypt się uruchomił.
+                Klocki z okrągłym gniazdem (np. <code>odległość</code>) wstawiaj w klocki sterujące.
+              </p>
+            </div>
+
+            <!-- SCENA: model w akcji -->
+            <div class="spike-col">
+              <div class="spike-col-title">▶️ Model w akcji</div>
+              <div class="spike-stage">
+                <canvas id="spikeCanvas" width="360" height="280"></canvas>
+              </div>
+              <div class="spike-hud" id="spikeHud"></div>
+              <p id="spikeMsg" style="font-size:12px; margin:8px 0 0; color:#22c55e;"></p>
+            </div>
+          </div>
         </div>
         <div class="game-card">
           <h4>🦘 Gra skokowa</h4>
@@ -2497,8 +2839,8 @@
     if (tab === 'market') renderMarket();
     if (tab === 'tickets') renderTickets();
     if (tab === 'profil') renderProfil();
-    if (tab === 'games') { cancelAnimationFrame(jAnim); jRunning=false; mazeInit(); jumpReset(); renderLeaderboards(); pixelInit(); renderPixelGallery(); frogInit(); if(jCtx()){ const c=jCanvas(), ctx=jCtx(); ctx.clearRect(0,0,c.width,c.height); ctx.fillStyle="#e5e7eb"; ctx.fillRect(0,jGround,c.width,2); ctx.fillStyle="#22c55e"; ctx.fillRect(jPlayer.x, jPlayer.y, jPlayer.w, jPlayer.h); ctx.fillStyle="#9ca3af"; ctx.font="12px sans-serif"; ctx.fillText("Kliknij Start aby zagrać", 90, 90); } }
-    else frogStop();
+    if (tab === 'games') { cancelAnimationFrame(jAnim); jRunning=false; mazeInit(); jumpReset(); renderLeaderboards(); pixelInit(); renderPixelGallery(); frogInit(); spikeInit(); if(jCtx()){ const c=jCanvas(), ctx=jCtx(); ctx.clearRect(0,0,c.width,c.height); ctx.fillStyle="#e5e7eb"; ctx.fillRect(0,jGround,c.width,2); ctx.fillStyle="#22c55e"; ctx.fillRect(jPlayer.x, jPlayer.y, jPlayer.w, jPlayer.h); ctx.fillStyle="#9ca3af"; ctx.font="12px sans-serif"; ctx.fillText("Kliknij Start aby zagrać", 90, 90); } }
+    else { frogStop(); spikeStopLoop(); }
   }
   function setMarketFilter(f) {
     marketFilter = f;
@@ -7287,6 +7629,1664 @@
       auth.style.animation = 'showAuth 0.4s forwards';
     }
   });
+  // ============================================================================
+  // SPIKE PRIME — programowanie modelu blokami (jak w Scratchu)
+  // Hub, silniki, czujniki, lampki i przyciski LEGO Spike Prime + arena,
+  // na której widać model w akcji.
+  // UWAGA: każda nazwa globalna ma prefiks spike/SPIKE — skrypt jest jeden dla
+  // całej strony, więdź kolizja nazw wyłącza WSZYSTKIE handlery onclick.
+  // ============================================================================
+
+  const SPIKE_CAT_CLS = { ev: 'spike-cat-ev', mo: 'spike-cat-mo', li: 'spike-cat-li', se: 'spike-cat-se', ct: 'spike-cat-ct', op: 'spike-cat-op' };
+  const SPIKE_PORTS = ['A', 'B', 'C', 'D', 'E'];
+  const SPIKE_MSGS = ['start', 'alarm', 'wykryto'];
+  const SPIKE_BTN = ['Lewy', 'Środkowy', 'Prawy'];
+  const SPIKE_COLORS = ['czerwony', 'pomarańczowy', 'żółty', 'zielony', 'niebieski', 'fioletowy', 'biały'];
+  const SPIKE_COLOR_HEX = {
+    czerwony: '#ef4444', pomarańczowy: '#f97316', żółty: '#eab308',
+    zielony: '#22c55e', niebieski: '#3b82f6', fioletowy: '#a855f7', biały: '#e5e7eb'
+  };
+  const SPIKE_MATRICES = {
+    'uśmiech':    ['01110', '10001', '00000', '10001', '01110'],
+    'smok':       ['01110', '10001', '10101', '10101', '01110'],
+    'serce':      ['01010', '11111', '11111', '01110', '00100'],
+    'strzałka':   ['00100', '01110', '10101', '00100', '00100'],
+    'kółko':      ['01110', '10001', '10001', '10001', '01110'],
+    'wykrzyknik': ['10001', '10001', '01110', '00000', '11111'],
+    'robot':      ['01110', '11011', '00000', '11111', '10101']
+  };
+
+  // --- elementy modelu (podpinane do portów A–E huba) ---
+  const SPIKE_DEVICES = {
+    motorL:   { name: 'Silnik duży',          icon: '🛞', desc: 'Koło napędowe — do jazdy (port A lub B).' },
+    motorM:   { name: 'Silnik średni',        icon: '⚙️', desc: 'Napęd narzędzia, dźwigu lub wentylatora.' },
+    gear:     { name: 'Przekładnia zębatata',  icon: '🦷', desc: 'Odwraca kierunek obrotów silnika.' },
+    distance: { name: 'Czujnik odległości',   icon: '📡', desc: 'Podaje dystans do przeszkody w centymetrach.' },
+    color:    { name: 'Czujnik koloru',       icon: '🎨', desc: 'Rozpoznaje kolor nawierzchni pod robotem.' },
+    force:    { name: 'Czujnik siły',         icon: '💥', desc: 'Wykrywa nacisk i wstrząs (w niutonach).' },
+    touch:    { name: 'Czujnik dotyku',       icon: '👆', desc: 'Przycisk dotykowy — true, gdy naciśnięty.' },
+    lamp:     { name: 'Lampka LED',           icon: '💡', desc: 'Świeci własnym kolorem, przydatna do sygnalizacji.' },
+    button:   { name: 'Przycisk',             icon: '🔘', desc: 'Przycisk — true, gdy naciśnięty.' },
+    speaker:  { name: 'Głośnik',              icon: '🔊', desc: 'Odtwarza dźwięki o zadanej wysokości.' },
+    light:    { name: 'Czujnik światła',      icon: '☀️', desc: 'Podaje jasność otoczenia w procentach.' }
+  };
+
+  const SPIKE_CATS = [
+    { id: 'ev', name: 'Zdarzenia',        cls: 'spike-cat-ev', open: true },
+    { id: 'mo', name: 'Silniki',          cls: 'spike-cat-mo', open: true },
+    { id: 'li', name: 'Światło i dźwięk', cls: 'spike-cat-li', open: false },
+    { id: 'se', name: 'Czujniki',         cls: 'spike-cat-se', open: true },
+    { id: 'ct', name: 'Kontrola',         cls: 'spike-cat-ct', open: true },
+    { id: 'op', name: 'Operatory',        cls: 'spike-cat-op', open: false }
+  ];
+
+  // shape: hat | stack | cap | c | rep | bool
+  // row: ['t',tekst] ['n',klucz,domyślna,min,max,krok] ['s',klucz,opcje,domyślna] ['slot',nazwa]
+  const SPIKE_DEFS = {
+    // --- zdarzenia (czapki) ---
+    hat_flag:    { cat: 'ev', shape: 'hat', row: [['t', '🟢 Gdy naciśnięty START']] },
+    hat_button:  { cat: 'ev', shape: 'hat', row: [['t', 'Gdy przycisk huba'], ['s', 'BTN', SPIKE_BTN, 'Lewy'], ['t', 'wciśnięty']] },
+    hat_distance:{ cat: 'ev', shape: 'hat', row: [['t', 'Gdy odległość <'], ['n', 'CM', 10, 0, 200, 1], ['t', 'cm']] },
+    hat_color:   { cat: 'ev', shape: 'hat', row: [['t', 'Gdy czujnik widzi'], ['s', 'COL', SPIKE_COLORS, 'czerwony']] },
+    hat_dark:    { cat: 'ev', shape: 'hat', row: [['t', 'Gdy światło <'], ['n', 'P', 30, 0, 100, 5], ['t', '%']] },
+    hat_force:   { cat: 'ev', shape: 'hat', row: [['t', 'Gdy siła >'], ['n', 'N', 3, 0, 100, 1], ['t', 'N']] },
+    hat_recv:    { cat: 'ev', shape: 'hat', row: [['t', 'Gdy otrzymam'], ['s', 'MSG', SPIKE_MSGS, 'start']] },
+
+    // --- silniki ---
+    motor_run:  { cat: 'mo', shape: 'stack', row: [['t', 'Uruchom silnik'], ['s', 'PORT', SPIKE_PORTS, 'A'], ['t', 'z mocą'], ['n', 'PWR', 50, 0, 100, 5], ['t', '%']] },
+    motor_for:  { cat: 'mo', shape: 'stack', row: [['t', 'Silnik'], ['s', 'PORT', SPIKE_PORTS, 'A'], ['t', 'przez'], ['n', 'SEC', 2, 0, 30, 0.5], ['t', 's']] },
+    motor_stop: { cat: 'mo', shape: 'stack', row: [['t', 'Zatrzymaj silnik'], ['s', 'PORT', SPIKE_PORTS, 'A']] },
+    all_stop:   { cat: 'mo', shape: 'stack', row: [['t', 'Zatrzymaj wszystkie silniki']] },
+    reset_rot:  { cat: 'mo', shape: 'stack', row: [['t', 'Zeruj licznik obrotów'], ['s', 'PORT', SPIKE_PORTS, 'A']] },
+    set_power:  { cat: 'mo', shape: 'stack', row: [['t', 'Ustaw moc jazdy na'], ['n', 'PWR', 50, 0, 100, 5], ['t', '%']] },
+    drive_time: { cat: 'mo', shape: 'stack', row: [['t', 'Jedź'], ['n', 'SEC', 2, 0, 30, 0.5], ['t', 's z mocą'], ['n', 'PWR', 50, 0, 100, 5], ['t', '%']] },
+    drive_rot:  { cat: 'mo', shape: 'stack', row: [['t', 'Jedź'], ['n', 'ROT', 2, 0, 50, 0.5], ['t', 'obrotów koła']] },
+    turn_deg:   { cat: 'mo', shape: 'stack', row: [['t', 'Skręć'], ['n', 'DEG', 90, -360, 360, 15], ['t', '°']] },
+
+    // --- światło i dźwięk ---
+    light_color:{ cat: 'li', shape: 'stack', row: [['t', 'Światło huba:'], ['s', 'COL', SPIKE_COLORS, 'czerwony'], ['t', 'jasność'], ['n', 'BR', 100, 0, 100, 10], ['t', '%']] },
+    lamp_color: { cat: 'li', shape: 'stack', row: [['t', 'Lampka na porcie'], ['s', 'PORT', SPIKE_PORTS, 'C'], ['t', 'na'], ['s', 'COL', SPIKE_COLORS, 'niebieski']] },
+    matrix:     { cat: 'li', shape: 'stack', row: [['t', 'Matryca LED:'], ['s', 'PAT', Object.keys(SPIKE_MATRICES), 'uśmiech'], ['t', 'w'], ['s', 'COL', SPIKE_COLORS, 'czerwony']] },
+    matrix_off: { cat: 'li', shape: 'stack', row: [['t', 'Wyczyść matrycę']] },
+    beep:       { cat: 'li', shape: 'stack', row: [['t', 'Dźwięk'], ['n', 'HZ', 440, 100, 2000, 10], ['t', 'Hz przez'], ['n', 'MS', 200, 50, 2000, 50], ['t', 'ms']] },
+
+    // --- czujniki (klocki-wartości) ---
+    rep_distance:{ cat: 'se', shape: 'rep', row: [['t', '📡 odległość (cm)']] },
+    rep_color:   { cat: 'se', shape: 'rep', row: [['t', '🎨 kolor']] },
+    rep_force:   { cat: 'se', shape: 'rep', row: [['t', '💥 siła (N)']] },
+    rep_bright:  { cat: 'se', shape: 'rep', row: [['t', '☀️ jasność (%)']] },
+    rep_motor:   { cat: 'se', shape: 'rep', row: [['t', 'obroty'], ['s', 'PORT', SPIKE_PORTS, 'A']] },
+    rep_power:   { cat: 'se', shape: 'rep', row: [['t', 'moc (%)']] },
+    rep_touch:   { cat: 'se', shape: 'bool', row: [['t', '👆 dotyk'], ['s', 'PORT', SPIKE_PORTS, 'C']] },
+    rep_button:  { cat: 'se', shape: 'bool', row: [['t', '🔘 przycisk'], ['s', 'PORT', SPIKE_PORTS, 'C']] },
+    rep_hubbtn:  { cat: 'se', shape: 'bool', row: [['t', 'przycisk huba'], ['s', 'BTN', SPIKE_BTN, 'Lewy']] },
+
+    // --- kontrola ---
+    wait:      { cat: 'ct', shape: 'stack', row: [['t', 'Czekaj'], ['n', 'SEC', 1, 0, 30, 0.5], ['t', 's']] },
+    repeat:    { cat: 'ct', shape: 'c', row: [['t', 'Powtórz'], ['n', 'N', 4, 1, 999, 1], ['t', 'razy']] },
+    forever:   { cat: 'ct', shape: 'c', cap: true, row: [['t', 'Powtarzaj ciągle']] },
+    if:        { cat: 'ct', shape: 'c', row: [['t', 'Jeżeli'], ['slot', 'COND'], ['t', 'to']] },
+    ifelse:    { cat: 'ct', shape: 'c', row: [['t', 'Jeżeli'], ['slot', 'COND'], ['t', 'to']], hasElse: true },
+    until:     { cat: 'ct', shape: 'c', row: [['t', 'Dopóki'], ['slot', 'COND'], ['t', 'nie']] },
+    stop_all:  { cat: 'ct', shape: 'cap', row: [['t', '⏹ Zatrzymaj wszystkie']] },
+    broadcast: { cat: 'ct', shape: 'stack', row: [['t', 'Wyślij'], ['s', 'MSG', SPIKE_MSGS, 'alarm']] },
+
+    // --- operatory ---
+    add: { cat: 'op', shape: 'rep', row: [['slot', 'A', 1, -99, 99, 1], ['t', '+'], ['slot', 'B', 2, -99, 99, 1]] },
+    sub: { cat: 'op', shape: 'rep', row: [['slot', 'A', 5, -99, 99, 1], ['t', '−'], ['slot', 'B', 3, -99, 99, 1]] },
+    mul: { cat: 'op', shape: 'rep', row: [['slot', 'A', 2, -99, 99, 1], ['t', '×'], ['slot', 'B', 3, -99, 99, 1]] },
+    div: { cat: 'op', shape: 'rep', row: [['slot', 'A', 6, -99, 99, 1], ['t', '÷'], ['slot', 'B', 2, -99, 99, 1]] },
+    lt:  { cat: 'op', shape: 'bool', row: [['slot', 'A', 0, -99, 999, 1], ['t', '<'], ['slot', 'B', 10, -99, 999, 1]] },
+    eq:  { cat: 'op', shape: 'bool', row: [['slot', 'A', 0, -99, 999, 1], ['t', '='], ['slot', 'B', 0, -99, 999, 1]] },
+    gt:  { cat: 'op', shape: 'bool', row: [['slot', 'A', 10, -99, 999, 1], ['t', '>'], ['slot', 'B', 0, -99, 999, 1]] },
+    eqc: { cat: 'op', shape: 'bool', row: [['s', 'A', SPIKE_COLORS, 'czerwony'], ['t', '='], ['s', 'B', SPIKE_COLORS, 'czerwony']] },
+    and: { cat: 'op', shape: 'bool', row: [['slot', 'A'], ['t', 'i'], ['slot', 'B']] },
+    or:  { cat: 'op', shape: 'bool', row: [['slot', 'A'], ['t', 'lub'], ['slot', 'B']] },
+    not: { cat: 'op', shape: 'bool', row: [['t', 'nie'], ['slot', 'A']] },
+    rand:{ cat: 'op', shape: 'rep', row: [['t', 'losowo od'], ['slot', 'A', 1, 0, 99, 1], ['t', 'do'], ['slot', 'B', 10, 1, 99, 1]] }
+  };
+
+  const SPIKE_MODEL_KEY = 'osiedle_spike_model';
+  const SPIKE_SCRIPTS_KEY = 'osiedle_spike_scripts';
+
+  // --- stan ---
+  let spikeBlocks = {};        // id -> blok
+  let spikeScripts = [];       // id pierwszych bloków skryptów
+  let spikeSeq = 1;
+  let spikeModel = { ports: { A: 'motorL', B: 'motorL', C: 'distance', D: null, E: null } };
+  let spikeRobot = { x: 40, y: 70, a: 0 };
+  let spikeHub = { light: '#22c55e', bright: 100, pattern: '', pcol: '#22c55e', btn: { Lewy: false, Środkowy: false, Prawy: false } };
+  let spikeMotors = {};
+  let spikeLamps = {};
+  let spikeSensors = { distance: 100, color: 'biały', force: 0, bright: 95 };
+  let spikePower = 50;
+  let spikeWalls = [];
+  let spikeTiles = [];
+  let spikeEditArena = false;
+  let spikeRunning = false;
+  let spikeAnim = null;
+  let spikeThreads = [];
+  let spikeGen = 0;
+  let spikeBound = false;
+  let spikeDrag = null;
+  let spikeOpenCats = {};
+
+  const SPIKE_CM_PX = 0.5;        // 1 piksel = 0,5 cm
+  const SPIKE_ARENA_W = 180;      // cm
+  const SPIKE_ARENA_H = 140;      // cm
+  const SPIKE_WHEEL_R = 4;       // cm
+  const SPIKE_WHEELBASE = 12;    // cm
+  const SPIKE_DEG_PER_SEC = 300; // obroty stopni/s przy 100% mocy
+
+  const spikeCanvas = () => document.getElementById('spikeCanvas');
+  const spikeCtx = () => spikeCanvas()?.getContext('2d');
+
+  function spikeLocalGet(key, fallback) {
+    const fb = typeof fallback === 'function' ? fallback : () => fallback;
+    try { const v = JSON.parse(localStorage.getItem(key) || 'null'); return v === null ? fb() : v; }
+    catch { return fb(); }
+  }
+  function spikeLocalSet(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { console.warn(e); }
+  }
+  function spikeNote(text, color) {
+    const el = document.getElementById('spikeMsg');
+    if (!el) return;
+    el.textContent = text;
+    el.style.color = color || '#22c55e';
+  }
+
+  // ==========================================================================
+  // MODEL — budowanie z elementów
+  // ==========================================================================
+  function spikeRenderParts() {
+    const box = document.getElementById('spikePartsList');
+    if (!box) return;
+    box.innerHTML = '';
+    for (const [key, d] of Object.entries(SPIKE_DEVICES)) {
+      const row = document.createElement('div');
+      row.className = 'spike-part';
+      const usedIn = SPIKE_PORTS.filter((p) => spikeModel.ports[p] === key);
+      row.innerHTML =
+        '<div class="spike-part-h"><span class="spike-ico">' + d.icon + '</span><span>' + d.name + '</span></div>' +
+        '<div class="spike-part-d">' + d.desc + '</div>' +
+        '<div class="spike-ports" data-dev="' + key + '"></div>' +
+        (usedIn.length ? '<div class="spike-attached"><span>📌 podpięty: ' + usedIn.join(', ') + '</span></div>' : '');
+      const ports = row.querySelector('.spike-ports');
+      for (const p of SPIKE_PORTS) {
+        const b = document.createElement('button');
+        b.className = 'spike-port' + (spikeModel.ports[p] === key ? ' filled' : '');
+        b.textContent = p;
+        b.title = (spikeModel.ports[p] === key ? 'Odłącz ' : 'Podłącz ') + d.name + ' do portu ' + p;
+        b.onclick = () => spikeTogglePort(key, p);
+        ports.appendChild(b);
+      }
+      const att = row.querySelector('.spike-attached');
+      if (att) {
+        const x = document.createElement('button');
+        x.className = 'spike-detach';
+        x.textContent = '✕ odłącz';
+        x.onclick = () => {
+          for (const p of usedIn) spikeModel.ports[p] = null;
+          spikeModelChanged();
+        };
+        att.appendChild(x);
+      }
+      box.appendChild(row);
+    }
+  }
+  function spikeTogglePort(dev, port) {
+    spikeModel.ports[port] = spikeModel.ports[port] === dev ? null : dev;
+    spikeModelChanged();
+  }
+  function spikeModelChanged() {
+    spikeLocalSet(SPIKE_MODEL_KEY, spikeModel);
+    spikeRenderParts();
+    spikeReset();
+  }
+
+  // ==========================================================================
+  // BLOKI — paleta
+  // ==========================================================================
+  function spikePaletteTab(which) {
+    const parts = document.getElementById('spikePartsPane');
+    const blocks = document.getElementById('spikeBlocksPane');
+    const tp = document.getElementById('spikeSubParts');
+    const tb = document.getElementById('spikeSubBlocks');
+    if (!parts || !blocks || !tp || !tb) return;
+    const onBlocks = which === 'blocks';
+    parts.classList.toggle('hidden', onBlocks);
+    blocks.classList.toggle('hidden', !onBlocks);
+    tp.classList.toggle('active', !onBlocks);
+    tb.classList.toggle('active', onBlocks);
+  }
+  function spikeRenderPalette() {
+    const pal = document.getElementById('spikePalette');
+    if (!pal) return;
+    pal.innerHTML = '';
+    for (const cat of SPIKE_CATS) {
+      if (spikeOpenCats[cat.id] === undefined) spikeOpenCats[cat.id] = cat.open;
+      const wrap = document.createElement('div');
+      wrap.className = 'spike-cat';
+      const h = document.createElement('div');
+      h.className = 'spike-cat-h';
+      h.innerHTML = '<span class="spike-cat-dot" style="background:' + SPIKE_CAT_HEX[cat.id] + '"></span>' +
+        '<span class="spike-caret">' + (spikeOpenCats[cat.id] ? '▼' : '▶') + '</span><span>' + cat.name + '</span>';
+      h.onclick = () => { spikeOpenCats[cat.id] = !spikeOpenCats[cat.id]; spikeRenderPalette(); };
+      const body = document.createElement('div');
+      body.className = 'spike-cat-body';
+      if (spikeOpenCats[cat.id]) {
+        for (const op of Object.keys(SPIKE_DEFS)) {
+          const d = SPIKE_DEFS[op];
+          if (d.cat !== cat.id) continue;
+          const el = spikeBuildBlock(op, null, true);
+          el.dataset.op = op;
+          body.appendChild(el);
+        }
+      }
+      wrap.appendChild(h);
+      wrap.appendChild(body);
+      pal.appendChild(wrap);
+    }
+  }
+  const SPIKE_CAT_HEX = { ev: '#d9822b', mo: '#2f6fd0', li: '#8b5cf6', se: '#0e9aa7', ct: '#d4a017', op: '#35a34a' };
+
+  // Buduje pojedynczy element DOM klocka (bez linków do drzewa skryptu)
+  function spikeBuildBlock(op, id, isPreview) {
+    const d = SPIKE_DEFS[op];
+    if (!d) return document.createElement('div');
+    const b = document.createElement('div');
+    b.className = 'spike-block ' + SPIKE_CAT_CLS[d.cat];
+    if (d.shape === 'hat') b.classList.add('spike-hat');
+    if (d.shape === 'cap') b.classList.add('spike-cap');
+    if (d.shape === 'rep') b.classList.add('spike-reporter');
+    if (d.shape === 'bool') b.classList.add('spike-boolean');
+    if (id) b.dataset.id = id;
+    if (!isPreview) b.dataset.op = op;
+
+    const row = document.createElement('div');
+    row.className = 'spike-row';
+    const vals = isPreview ? null : (spikeBlocks[id] || {}).f || {};
+    const slots = isPreview ? null : (spikeBlocks[id] || {}).s || {};
+
+    for (const part of d.row) {
+      if (part[0] === 't') {
+        const s = document.createElement('span');
+        s.className = 'spike-lbl';
+        s.textContent = part[1];
+        row.appendChild(s);
+      } else if (part[0] === 'n') {
+        const inp = document.createElement('input');
+        inp.type = 'number';
+        inp.className = 'spike-in';
+        inp.value = vals && vals[part[1]] !== undefined ? vals[part[1]] : part[2];
+        inp.min = part[3]; inp.max = part[4]; inp.step = part[5];
+        if (id) {
+          inp.oninput = () => {
+            const blk = spikeBlocks[id];
+            if (!blk) return;
+            blk.f[part[1]] = spikeNum(inp.value, part[2]);
+            spikeSave();
+          };
+          inp.onpointerdown = (e) => e.stopPropagation();
+          inp.onkeydown = (e) => e.stopPropagation();
+        } else {
+          inp.disabled = true;
+        }
+        row.appendChild(inp);
+      } else if (part[0] === 's') {
+        const sel = document.createElement('select');
+        sel.className = 'spike-sel';
+        const def = vals && vals[part[1]] !== undefined ? vals[part[1]] : part[3];
+        for (const o of part[2]) {
+          const opt = document.createElement('option');
+          opt.value = o;
+          opt.textContent = o;
+          sel.appendChild(opt);
+        }
+        sel.value = def;
+        if (id) {
+          sel.onchange = () => {
+            const blk = spikeBlocks[id];
+            if (!blk) return;
+            blk.f[part[1]] = sel.value;
+            spikeSave();
+          };
+          sel.onpointerdown = (e) => e.stopPropagation();
+        } else {
+          sel.disabled = true;
+        }
+        row.appendChild(sel);
+      } else if (part[0] === 'slot') {
+        const slot = document.createElement('span');
+        slot.className = 'spike-slot';
+        slot.dataset.slot = part[1];
+        if (id) slot.dataset.owner = id;
+        const child = slots ? slots[part[1]] : null;
+        if (child && spikeBlocks[child]) slot.appendChild(spikeRenderBlockTree(child));
+        else if (!isPreview && part.length > 2) {
+          // puste gniazdo matematyczne: pole z liczbą (reporter można w nie upuścić)
+          const inp = document.createElement('input');
+          inp.className = 'spike-num';
+          inp.value = vals[part[1]] !== undefined ? vals[part[1]] : part[2];
+          inp.type = 'text';
+          inp.inputMode = 'numeric';
+          inp.oninput = () => {
+            const b = spikeBlocks[id];
+            if (b) { b.f[part[1]] = spikeNum(inp.value); }
+            spikeSave();
+          };
+          slot.appendChild(inp);
+          slot.dataset.typed = '1';
+        } else if (!isPreview) slot.textContent = '';
+        row.appendChild(slot);
+      }
+    }
+    b.appendChild(row);
+
+    // klocki C — jama na podbloki
+    if (d.shape === 'c') {
+      const mouth = document.createElement('div');
+      mouth.className = 'spike-mouth';
+      b.appendChild(mouth);
+      const body = document.createElement('div');
+      body.className = 'spike-body';
+      body.dataset.sub = id || '';
+      body.style.minHeight = '13px';
+      if (id) {
+        const sub = spikeBlocks[id] ? spikeBlocks[id].sub : null;
+        if (sub) body.appendChild(spikeRenderBlockTree(sub));
+      }
+      b.appendChild(body);
+      if (d.hasElse) {
+        const els = document.createElement('div');
+        els.className = 'spike-row';
+        els.style.opacity = '.85';
+        els.textContent = 'w przeciwnym razie';
+        b.appendChild(els);
+        const ebody = document.createElement('div');
+        ebody.className = 'spike-body';
+        ebody.dataset.elsub = id || '';
+        ebody.style.minHeight = '13px';
+        if (id) {
+          const es = spikeBlocks[id] ? spikeBlocks[id].elsub : null;
+          if (es) ebody.appendChild(spikeRenderBlockTree(es));
+        }
+        b.appendChild(ebody);
+      }
+      const foot = document.createElement('div');
+      foot.className = 'spike-foot';
+      b.appendChild(foot);
+    }
+    return b;
+  }
+
+  // Renderuje blok wraz z jego łańcuchem "next" (zagnieżdżone divy = auto-layout)
+  function spikeRenderBlockTree(id) {
+    const b = spikeBlocks[id];
+    if (!b) return document.createElement('div');
+    const el = spikeBuildBlock(b.op, b.id, false);
+    const nextId = b.next;
+    const hasC = SPIKE_DEFS[b.op].shape === 'c';
+    if (nextId && !hasC) {
+      const body = document.createElement('div');
+      body.className = 'spike-body';
+      body.dataset.next = id;
+      body.appendChild(spikeRenderBlockTree(nextId));
+      el.appendChild(body);
+    } else if (nextId && hasC) {
+      const body = document.createElement('div');
+      body.className = 'spike-body';
+      body.dataset.next = id;
+      body.appendChild(spikeRenderBlockTree(nextId));
+      el.appendChild(body);
+    }
+    return el;
+  }
+
+  // ==========================================================================
+  // BLOKI — warsztat
+  // ==========================================================================
+  function spikeNewBlock(op) {
+    const d = SPIKE_DEFS[op];
+    if (!d) return null;
+    const id = 'b' + (spikeSeq++);
+    const f = {};
+    for (const part of d.row) {
+      if (part[0] === 'n') f[part[1]] = part[2];
+      if (part[0] === 's') f[part[1]] = part[3];
+    }
+    const s = {};
+    // 'slot' z 4. elementem to gniazdo reporterskie z domyślną liczbą (matematyczne)
+    for (const part of d.row) if (part[0] === 'slot') { s[part[1]] = null; if (part.length > 2) f[part[1]] = part[2]; }
+    spikeBlocks[id] = { id, op, f, s, next: null, sub: null, elsub: null, parent: null, ps: null, x: 16, y: 16 };
+    return spikeBlocks[id];
+  }
+
+  function spikeRenderWorkspace() {
+    const ws = document.getElementById('spikeWs');
+    if (!ws) return;
+    ws.innerHTML = '';
+    for (const sid of spikeScripts) {
+      const b = spikeBlocks[sid];
+      if (!b) continue;
+      const wrap = document.createElement('div');
+      wrap.className = 'spike-script';
+      wrap.dataset.root = sid;
+      wrap.style.left = b.x + 'px';
+      wrap.style.top = b.y + 'px';
+      wrap.appendChild(spikeRenderBlockTree(sid));
+      ws.appendChild(wrap);
+    }
+  }
+
+  function spikeSave() {
+    spikeLocalSet(SPIKE_SCRIPTS_KEY, {
+      seq: spikeSeq,
+      scripts: spikeScripts.map((id) => spikeBlocks[id]).filter(Boolean),
+      blocks: spikeBlocks
+    });
+  }
+  function spikeLoad() {
+    const raw = spikeLocalGet(SPIKE_SCRIPTS_KEY, null);
+    if (raw && raw.blocks && Array.isArray(raw.scripts)) {
+      spikeBlocks = raw.blocks;
+      spikeScripts = raw.scripts.map((b) => b && b.id).filter((id) => id && spikeBlocks[id]);
+      spikeSeq = raw.seq || (1000 + Object.keys(spikeBlocks).length);
+      return;
+    }
+    spikeBlocks = {};
+    spikeScripts = [];
+    spikeSeq = 1;
+  }
+  function spikeClearScripts() {
+    spikeStop();
+    spikeBlocks = {};
+    spikeScripts = [];
+    spikeSeq = 1;
+    spikeRenderWorkspace();
+    spikeSave();
+    spikeNote('🧹 Skrypty wyczyszczone.', '#6b7280');
+  }
+
+  // --- łańcuchy: następny / podblok ---
+  function spikeChainEnd(id) {
+    let cur = id;
+    while (cur && spikeBlocks[cur] && spikeBlocks[cur].next) cur = spikeBlocks[cur].next;
+    return cur;
+  }
+  function spikeChainLen(id) {
+    let n = 0, cur = id;
+    while (cur) { n++; cur = spikeBlocks[cur] && spikeBlocks[cur].next; }
+    return n;
+  }
+  function spikeSubChainEnd(id) {
+    let cur = id;
+    while (cur && spikeBlocks[cur] && spikeBlocks[cur].sub) cur = spikeBlocks[cur].sub;
+    return cur;
+  }
+  // odłącza blok (z całym poddrzewem) od rodzica
+  function spikeDetach(id) {
+    const b = spikeBlocks[id];
+    if (!b) return;
+    const p = b.parent ? spikeBlocks[b.parent] : null;
+    if (!p) {
+      spikeScripts = spikeScripts.filter((s) => s !== id);
+    } else if (b.ps === 'next') {
+      p.next = b.next;
+    } else if (b.ps === 'sub') {
+      p.sub = b.next;
+    } else if (b.ps === 'elsub') {
+      p.elsub = b.next;
+    }
+    if (b.next) {
+      const nb = spikeBlocks[b.next];
+      if (nb) { nb.parent = b.parent; nb.ps = b.ps; }
+    }
+    b.parent = null;
+    b.ps = null;
+  }
+  function spikeAttachAfter(anchorId, id) {
+    const a = spikeBlocks[anchorId];
+    const b = spikeBlocks[id];
+    if (!a || !b || a === b) return;
+    // łańcuch, który był za kotwicą, musi zawiesić się na wstawionym klocku
+    const after = a.next;
+    a.next = id;
+    b.parent = anchorId;
+    b.ps = 'next';
+    // wstawiany klocek może już prowadzić za sobą łańcuch — nie wolno go urwać
+    const last = spikeChainEnd(id);
+    if (last) {
+      const lb = spikeBlocks[last];
+      if (lb) lb.next = after;
+    }
+    if (after) {
+      const ab = spikeBlocks[after];
+      if (ab) { ab.parent = last || id; ab.ps = 'next'; }
+    }
+  }
+  function spikeAttachTop(id, x, y) {
+    const b = spikeBlocks[id];
+    if (!b) return;
+    b.x = x;
+    b.y = y;
+    b.parent = null;
+    b.ps = null;
+    spikeScripts.push(id);
+  }
+  function spikeAttachSub(cId, id) {
+    const c = spikeBlocks[cId];
+    const b = spikeBlocks[id];
+    if (!c || !b || c === b) return;
+    const first = c.sub;
+    c.sub = id;
+    b.parent = cId;
+    b.ps = 'sub';
+    // doklejamy CAŁY łańcuch: b.next już trzyma klocki, które mają wejść do jamy
+    const last = spikeChainEnd(id);
+    if (last !== id) { const lb = spikeBlocks[last]; if (lb) lb.ps = 'next'; }
+    if (last) {
+      const lb = spikeBlocks[last];
+      if (lb) lb.next = first;
+    }
+    if (first) {
+      const fb = spikeBlocks[first];
+      if (fb) { fb.parent = last || id; fb.ps = 'next'; }
+    }
+  }
+  function spikeAttachElsub(cId, id) {
+    const c = spikeBlocks[cId];
+    const b = spikeBlocks[id];
+    if (!c || !b || c === b) return;
+    const first = c.elsub;
+    c.elsub = id;
+    b.parent = cId;
+    b.ps = 'elsub';
+    const last = spikeChainEnd(id);
+    if (last !== id) { const lb = spikeBlocks[last]; if (lb) lb.ps = 'next'; }
+    if (last) {
+      const lb = spikeBlocks[last];
+      if (lb) lb.next = first;
+    }
+    if (first) {
+      const fb = spikeBlocks[first];
+      if (fb) { fb.parent = last || id; fb.ps = 'next'; }
+    }
+  }
+  // Czyści nadpisaną zawartość gniazda (klocki-wartości wchodzą tylko jeden raz)
+  function spikeSetSlot(ownerId, slotName, id) {
+    const o = spikeBlocks[ownerId];
+    if (!o) return;
+    const od = SPIKE_DEFS[o.op];
+    // gniazdo musi być zadeklarowane przez ten klocek (inaczej dane nigdy nie byłyby wyrenderowane)
+    if (!od || !od.row.some((p) => p[0] === 'slot' && p[1] === slotName)) return;
+    // przyjmujemy wyłącznie id istniejącego klocka (nie obiekt)
+    if (id != null && !spikeBlocks[id]) return;
+    if (!o.s) o.s = {};
+    const prev = o.s[slotName];
+    if (prev && prev !== id) {
+      const pb = spikeBlocks[prev];
+      if (pb) { pb.parent = null; pb.ps = null; spikeAttachTop(prev, pb.x, pb.y + 30); }
+    }
+    o.s[slotName] = id;
+    if (id) {
+      // wchodzący klocek nie może mieć własnych potomków ani starych sąsiadów
+      spikeDetach(id);
+      const nb = spikeBlocks[id];
+      if (nb) { nb.parent = null; nb.ps = null; nb.next = null; nb.sub = null; nb.elsub = null; }
+    }
+  }
+// ==========================================================================
+  // PRZECIĄGANIE I DOCZEPANIE
+  // ==========================================================================
+  function spikeWsPoint(e) {
+    const ws = document.getElementById('spikeWs');
+    if (!ws) return { x: 0, y: 0 };
+    const r = ws.getBoundingClientRect();
+    return { x: e.clientX - r.left + ws.scrollLeft, y: e.clientY - r.top + ws.scrollTop };
+  }
+
+  // Znajduje najlepsze miejsce pod upuszczenie: pod klockiem, w jamie klocka C albo w gnieździe.
+  function spikeFindTarget(px, py, shape) {
+    const ws = document.getElementById('spikeWs');
+    if (!ws) return null;
+    const wr = ws.getBoundingClientRect();
+    const isValue = shape === 'rep' || shape === 'bool';
+    let best = null;
+
+    const consider = (cand, dist) => {
+      if (!best || dist < best.dist) best = cand;
+    };
+
+    if (isValue) {
+      for (const slot of ws.querySelectorAll('.spike-slot[data-owner]')) {
+        const r = slot.getBoundingClientRect();
+        const x = r.left - wr.left + ws.scrollLeft;
+        const y = r.top - wr.top + ws.scrollTop;
+        if (px >= x - 6 && px <= x + r.width + 6 && py >= y - 4 && py <= y + r.height + 4) {
+          return { kind: 'slot', owner: slot.dataset.owner, slot: slot.dataset.slot, x, y };
+        }
+      }
+      return null;
+    }
+
+    // podbloki i łańcuchy "next"
+    for (const body of ws.querySelectorAll('.spike-body[data-next], .spike-body[data-sub], .spike-body[data-elsub]')) {
+      const r = body.getBoundingClientRect();
+      const x = r.left - wr.left + ws.scrollLeft;
+      const y = r.top - wr.top + ws.scrollTop;
+      const inside = px >= x - 12 && py >= y - 8 && py <= y + r.height + 8 && px <= x + r.width + 40;
+      const dist = isValue ? 1e9 : Math.hypot(px - (x + 10), py - y);
+      if (inside) consider({
+        kind: body.dataset.next ? 'next' : (body.dataset.sub ? 'sub' : 'elsub'),
+        owner: body.dataset.next || body.dataset.sub || body.dataset.elsub,
+        x, y
+      }, -1);
+      else if (Math.abs(py - y) < 26 && Math.abs(px - (x + 10)) < 46) {
+        consider({
+          kind: body.dataset.next ? 'next' : (body.dataset.sub ? 'sub' : 'elsub'),
+          owner: body.dataset.next || body.dataset.sub || body.dataset.elsub,
+          x, y
+        }, dist);
+      }
+    }
+    return best;
+  }
+
+  function spikeClearMarker() {
+    for (const el of document.querySelectorAll('.spike-mark')) el.remove();
+    for (const el of document.querySelectorAll('.spike-slot.over')) el.classList.remove('over');
+  }
+  function spikeMarkTarget(t, shape) {
+    if (!t) return;
+    if (t.kind === 'slot') {
+      const sel = document.querySelector('.spike-slot[data-owner="' + t.owner + '"][data-slot="' + t.slot + '"]');
+      if (sel) sel.classList.add('over');
+      return;
+    }
+    const d = document.createElement('div');
+    d.className = 'spike-mark';
+    const h = shape === 'rep' || shape === 'bool' ? 20 : 12;
+    d.style.cssText = 'position:absolute;left:' + t.x + 'px;top:' + (t.y - 2) + 'px;height:' + h +
+      'px;width:100px;border:2px dashed #ff7a00;border-radius:6px;pointer-events:none;z-index:20;';
+    const ws = document.getElementById('spikeWs');
+    if (ws) ws.appendChild(d);
+  }
+
+  function spikeStartDrag(e, op, blockId) {
+    if (e.button !== undefined && e.button !== 0) return;
+    e.preventDefault();
+    let id = blockId;
+    let fromPalette = false;
+    if (id) {
+      const src = spikeBlocks[id];
+      if (!src) return;
+      op = src.op;
+    } else {
+      const nb = spikeNewBlock(op);
+      if (!nb) return;
+      id = nb.id;
+      fromPalette = true;
+    }
+    const blk = spikeBlocks[id];
+    if (!blk) return;
+
+    // odłączamy przed przeciąganiem (żeby móc upuścić w inne miejsce)
+    if (!fromPalette) spikeDetach(id);
+    const ghost = spikeBuildBlock(op, null, false);
+    // ghost pokazuje tylko ten jeden klocek (bez potomków), żeby był lekki
+    for (const child of Array.from(ghost.querySelectorAll('.spike-body'))) child.remove();
+    ghost.classList.add('spike-ghost');
+    const ws = document.getElementById('spikeWs');
+    if (ws) ws.appendChild(ghost);
+
+    const p = spikeWsPoint(e);
+    const g = ghost.getBoundingClientRect();
+    const offX = e.clientX - g.left;
+    const offY = e.clientY - g.top;
+
+    spikeDrag = { id, op, fromPalette, ghost, offX, offY, target: null };
+    document.addEventListener('pointermove', spikeDragMove);
+    document.addEventListener('pointerup', spikeDragEnd);
+    spikeDragMove(e);
+    spikeRenderWorkspace();
+  }
+
+  function spikeDragMove(e) {
+    if (!spikeDrag) return;
+    const ws = document.getElementById('spikeWs');
+    if (!ws) return;
+    const wr = ws.getBoundingClientRect();
+    const x = e.clientX - wr.left + ws.scrollLeft - spikeDrag.offX;
+    const y = e.clientY - wr.top + ws.scrollTop - spikeDrag.offY;
+    spikeDrag.ghost.style.left = x + 'px';
+    spikeDrag.ghost.style.top = y + 'px';
+    const t = spikeFindTarget(x + 8, y + 12, spikeDrag.op ? SPIKE_DEFS[spikeDrag.op].shape : 'stack');
+    spikeClearMarker();
+    spikeMarkTarget(t, spikeDrag.op ? SPIKE_DEFS[spikeDrag.op].shape : 'stack');
+    spikeDrag.target = t;
+    spikeDrag.pos = { x, y };
+  }
+
+  function spikeDragEnd() {
+    document.removeEventListener('pointermove', spikeDragMove);
+    document.removeEventListener('pointerup', spikeDragEnd);
+    if (!spikeDrag) return;
+    const d = spikeDrag;
+    spikeDrag = null;
+    if (d.ghost) d.ghost.remove();
+    spikeClearMarker();
+
+    const blk = spikeBlocks[d.id];
+    if (!blk) { spikeRenderWorkspace(); return; }
+    const shape = SPIKE_DEFS[d.op].shape;
+    const t = d.target;
+    const pos = d.pos || { x: 16, y: 16 };
+
+    if (t && t.kind === 'slot') {
+      const ownerDef = SPIKE_DEFS[spikeBlocks[t.owner].op];
+      const ok = shape === 'bool' ? ['if', 'ifelse', 'until', 'and', 'or', 'not'].includes(ownerDef.op)
+        : shape === 'rep' ? ['add', 'sub', 'mul', 'div', 'lt', 'eq', 'gt', 'rand'].includes(ownerDef.op)
+        : true;
+      if (!ok) {
+        spikeNote('⚠️ Tego klocka nie da się wstawić w to gniazdo.', '#ef4444');
+        spikeAttachTop(d.id, pos.x, pos.y);
+      } else {
+        spikeSetSlot(t.owner, t.slot, d.id);
+      }
+    } else if (t && t.kind === 'next') {
+      const anchor = spikeChainEnd(t.owner);
+      const anchorDef = SPIKE_DEFS[spikeBlocks[anchor].op];
+      // nie pozwól dokleić "po" czapki (czapka zawsze zaczyna skrypt)
+      if (anchorDef.shape !== 'hat' || d.fromPalette === false) {
+        if (!(d.op && SPIKE_DEFS[d.op].shape === 'hat')) {
+          spikeAttachAfter(anchor, d.id);
+        } else {
+          spikeAttachTop(d.id, pos.x, pos.y);
+        }
+      } else {
+        spikeAttachTop(d.id, pos.x, pos.y);
+      }
+    } else if (t && (t.kind === 'sub' || t.kind === 'elsub')) {
+      if (t.kind === 'sub') spikeAttachSub(t.owner, d.id);
+      else spikeAttachElsub(t.owner, d.id);
+    } else {
+      spikeAttachTop(d.id, Math.max(4, pos.x), Math.max(4, pos.y));
+    }
+
+    // klocki-wartości nie mogą mieć własnych potomków
+    if (shape === 'rep' || shape === 'bool') { blk.next = null; blk.sub = null; blk.elsub = null; }
+    spikeRenderWorkspace();
+    spikeSave();
+  }
+
+  // ==========================================================================
+  // ARENA — układ świata sensorycznego
+  // ==========================================================================
+  function spikeDefaultArena() {
+    spikeWalls = [
+      { x: 120, y: 30, w: 4, h: 40 },
+      { x: 60, y: 100, w: 46, h: 4 }
+    ];
+    spikeTiles = [
+      { x: 100, y: 105, w: 22, h: 22, kind: 'czerwony' },
+      { x: 140, y: 60, w: 22, h: 22, kind: 'niebieski' },
+      { x: 30, y: 30, w: 22, h: 22, kind: 'zielony' },
+      { x: 145, y: 108, w: 22, h: 22, kind: 'dark' }
+    ];
+  }
+  function spikeIsWall(x, y) {
+    if (x < 0 || y < 0 || x > SPIKE_ARENA_W || y > SPIKE_ARENA_H) return true;
+    for (const w of spikeWalls) if (x >= w.x && x <= w.x + w.w && y >= w.y && y <= w.y + w.h) return true;
+    return false;
+  }
+  function spikeTileAt(x, y) {
+    for (const t of spikeTiles) if (x >= t.x && x <= t.x + t.w && y >= t.y && y <= t.y + t.h) return t;
+    return null;
+  }
+
+  // ==========================================================================
+  // SYMULACJA ROBOTA
+  // ==========================================================================
+  function spikeReset() {
+    spikeRobot = { x: 40, y: 70, a: 0 };
+    spikeMotors = {};
+    for (const p of SPIKE_PORTS) spikeMotors[p] = { on: false, pwr: 0, deg: 0 };
+    spikeLamps = {};
+    for (const p of SPIKE_PORTS) spikeLamps[p] = null;
+    spikeHub = { light: '#22c55e', bright: 100, pattern: '', pcol: '#22c55e', btn: { Lewy: false, Środkowy: false, Prawy: false } };
+    spikePower = 50;
+    spikeSensors = { distance: 100, color: 'biały', force: 0, bright: 95 };
+    spikeForceHit = 0;
+    spikeUpdateSensors();
+    spikeHud();
+  }
+
+  const spikeWheelIs = (p) => (p === 'A' || p === 'B') &&
+    (spikeModel.ports.A === 'motorL' || spikeModel.ports.B === 'motorL');
+
+  function spikeUpdate(dt) {
+    // obrót silników
+    let dA = 0, dB = 0;
+    for (const p of SPIKE_PORTS) {
+      const m = spikeMotors[p];
+      if (!m || !m.on) continue;
+      const adv = (m.pwr / 100) * SPIKE_DEG_PER_SEC * dt;
+      m.deg += adv;
+      if (spikeWheelIs(p)) { if (p === 'A') dA += adv; else dB += adv; }
+    }
+    // napęd różnicowy: (dA+dB)/2 do przodu, (dB-dA)/baza w zakręt
+    if (dA || dB) {
+      const cmPerDeg = (2 * Math.PI * SPIKE_WHEEL_R) / 360;
+      const fwd = ((dA + dB) / 2) * cmPerDeg;
+      const turn = ((dB - dA) / 2) * cmPerDeg / SPIKE_WHEELBASE;
+      spikeRobot.a += turn;
+      const nx = spikeRobot.x + Math.cos(spikeRobot.a) * fwd;
+      const ny = spikeRobot.y + Math.sin(spikeRobot.a) * fwd;
+      const hit = spikeIsWall(nx, ny);
+      if (hit) {
+        spikeForceHit = Math.min(30, spikeForceHit + Math.abs(fwd) * 40 + 1);
+        // zatrzymaj koła przy ścianie
+        for (const p of ['A', 'B']) if (spikeMotors[p]) spikeMotors[p].on = false;
+        spikeNote('🛑 Robot zderzył się ze ścianą — silniki zatrzymane.', '#ef4444');
+      } else {
+        spikeRobot.x = nx;
+        spikeRobot.y = ny;
+      }
+    }
+    spikeForceHit *= Math.pow(0.02, dt);
+    spikeUpdateSensors();
+  }
+  let spikeForceHit = 0;
+
+  function spikeUpdateSensors() {
+    const a = spikeRobot.a;
+    const fx = spikeRobot.x + Math.cos(a) * 5;
+    const fy = spikeRobot.y + Math.sin(a) * 5;
+
+    // odległość: marsz po promieniu co 1 cm
+    let dist = 100;
+    for (let d = 2; d <= 100; d++) {
+      if (spikeIsWall(fx + Math.cos(a) * d, fy + Math.sin(a) * d)) { dist = d; break; }
+    }
+    // czujnik musi być zamontowany, żeby coś zwracał
+    spikeSensors.distance = spikeHasSensor('distance') ? dist : 100;
+
+    const tile = spikeTileAt(fx, fy);
+    spikeSensors.color = spikeHasSensor('color') ? (tile && SPIKE_COLOR_HEX[tile.kind] ? tile.kind : 'biały') : 'biały';
+    spikeSensors.bright = spikeHasSensor('light') ? (tile && tile.kind === 'dark' ? 18 : 95) : 95;
+    spikeSensors.force = spikeHasSensor('force') ? Math.round(spikeForceHit * 10) / 10 : 0;
+
+    // przyciski/_dotyk_ na porcie reagują na nacisk (gdy stoi przy ścianie)
+    for (const p of SPIKE_PORTS) {
+      const dev = spikeModel.ports[p];
+      if (dev === 'touch') spikeLamps[p] = spikeForceHit > 0.2;
+      if (dev === 'button') spikeLamps[p] = false;
+    }
+  }
+  function spikeHasSensor(kind) {
+    return SPIKE_PORTS.some((p) => spikeModel.ports[p] === kind);
+  }
+  function spikePortDevice(p) { return spikeModel.ports[p] || null; }
+// ==========================================================================
+  // INTERPRETER
+  // ==========================================================================
+  function spikeNum(v, def) {
+    const n = typeof v === 'number' ? v : parseFloat(v);
+    return Number.isFinite(n) ? n : (def === undefined ? 0 : def);
+  }
+  function spikeVal(b, key) {
+    return b && b.f ? b.f[key] : undefined;
+  }
+  function spikeTruthy(v) {
+    if (typeof v === 'boolean') return v;
+    if (typeof v === 'number') return v !== 0;
+    if (typeof v === 'string') return v !== '' && v !== 'false';
+    return !!v;
+  }
+  // wartość gniazda: null gdy puste (jak w Scratchu)
+  function spikeEvalSlot(ownerId, name) {
+    const o = spikeBlocks[ownerId];
+    if (!o || !o.s) return null;
+    const id = o.s[name];
+    if (!id || !spikeBlocks[id]) return null;
+    return spikeEvalBlock(id);
+  }
+  function spikeEvalBlock(id) {
+    const b = spikeBlocks[id];
+    if (!b) return null;
+    const f = b.f;
+    switch (b.op) {
+      case 'rep_distance': return spikeSensors.distance;
+      case 'rep_color':    return spikeSensors.color;
+      case 'rep_force':    return spikeSensors.force;
+      case 'rep_bright':   return spikeSensors.bright;
+      case 'rep_motor':    return spikeMotors[f.PORT] ? spikeMotors[f.PORT].deg : 0;
+      case 'rep_power':    return spikePower;
+      case 'rep_touch':    return !!spikeLamps[f.PORT];
+      case 'rep_button':   return !!spikeLamps[f.PORT];
+      case 'rep_hubbtn':   return !!spikeHub.btn[f.BTN];
+      case 'add':  return spikeNum(spikeEvalSlot(b.id, 'A') ?? f.A) + spikeNum(spikeEvalSlot(b.id, 'B') ?? f.B);
+      case 'sub':  return spikeNum(spikeEvalSlot(b.id, 'A') ?? f.A) - spikeNum(spikeEvalSlot(b.id, 'B') ?? f.B);
+      case 'mul':  return spikeNum(spikeEvalSlot(b.id, 'A') ?? f.A) * spikeNum(spikeEvalSlot(b.id, 'B') ?? f.B);
+      case 'div': {
+        const d = spikeNum(spikeEvalSlot(b.id, 'B') ?? f.B);
+        return d === 0 ? 0 : spikeNum(spikeEvalSlot(b.id, 'A') ?? f.A) / d;
+      }
+      case 'lt': return spikeNum(spikeEvalSlot(b.id, 'A') ?? f.A) < spikeNum(spikeEvalSlot(b.id, 'B') ?? f.B);
+      case 'eq': return spikeNum(spikeEvalSlot(b.id, 'A') ?? f.A) === spikeNum(spikeEvalSlot(b.id, 'B') ?? f.B);
+      case 'gt': return spikeNum(spikeEvalSlot(b.id, 'A') ?? f.A) > spikeNum(spikeEvalSlot(b.id, 'B') ?? f.B);
+      case 'eqc': return f.A === f.B;
+      case 'and': return spikeTruthy(spikeEvalSlot(b.id, 'A')) && spikeTruthy(spikeEvalSlot(b.id, 'B'));
+      case 'or':  return spikeTruthy(spikeEvalSlot(b.id, 'A')) || spikeTruthy(spikeEvalSlot(b.id, 'B'));
+      case 'not': return !spikeTruthy(spikeEvalSlot(b.id, 'A'));
+      case 'rand': {
+        const lo = Math.round(spikeNum(f.A, 1)), hi = Math.round(spikeNum(f.B, 10));
+        return Math.floor(Math.random() * (hi - lo + 1)) + lo;
+      }
+      default: return null;
+    }
+  }
+  function spikeCondOf(b) {
+    const v = spikeEvalSlot(b.id, 'COND');
+    return v === null ? false : spikeTruthy(v);
+  }
+  // warunek czapki zdarzeniowej
+  function spikeHatTrue(b) {
+    const f = b.f;
+    switch (b.op) {
+      case 'hat_button':   return !!spikeHub.btn[f.BTN];
+      case 'hat_distance': return spikeSensors.distance < spikeNum(f.CM);
+      case 'hat_color':    return spikeSensors.color === f.COL;
+      case 'hat_dark':     return spikeSensors.bright < spikeNum(f.P);
+      case 'hat_force':    return spikeSensors.force > spikeNum(f.N);
+      default: return false;
+    }
+  }
+
+  const spikeAlive = (rt) => spikeRunning && !rt.stop && rt.gen === spikeGen;
+  function spikeSleep(ms, rt) {
+    return new Promise((resolve) => {
+      const step = 30;
+      let left = ms;
+      const t = setInterval(() => {
+        left -= step;
+        if (!spikeAlive(rt) || left <= 0) { clearInterval(t); resolve(); }
+      }, step);
+    });
+  }
+  function spikeSpin() {
+    // jedna klatka — pętle zależne od czujników muszą oddychać
+    return new Promise((resolve) => setTimeout(resolve, 16));
+  }
+
+  function spikeStartThread(rootId) {
+    const b = spikeBlocks[rootId];
+    if (!b) return;
+    const rt = { stop: false, stopAll: false, gen: spikeGen, rootId };
+    spikeThreads.push(rt);
+    spikeExecChain(b.next, rt).then(() => { rt.stop = true; });
+  }
+
+  async function spikeRunBlock(b, rt) {
+    const f = b.f;
+    const d = SPIKE_DEFS[b.op];
+    switch (b.op) {
+      case 'wait':
+        await spikeSleep(spikeNum(f.SEC) * 1000, rt);
+        return;
+
+      case 'repeat': {
+        const n = Math.max(0, Math.round(spikeNum(f.N, 4)));
+        for (let i = 0; i < n && spikeAlive(rt); i++) {
+          await spikeExecChain(b.sub, rt);
+          if (rt.stopAll) return;
+        }
+        await spikeExecChain(b.next, rt);
+        return;
+      }
+      case 'forever':
+        while (spikeAlive(rt)) {
+          await spikeExecChain(b.sub, rt);
+          if (rt.stopAll) return;
+        }
+        return;
+      case 'if':
+        if (spikeCondOf(b)) await spikeExecChain(b.sub, rt);
+        if (!rt.stopAll) await spikeExecChain(b.next, rt);
+        return;
+      case 'ifelse':
+        if (spikeCondOf(b)) await spikeExecChain(b.sub, rt);
+        else await spikeExecChain(b.elsub, rt);
+        if (!rt.stopAll) await spikeExecChain(b.next, rt);
+        return;
+      case 'until':
+        while (spikeAlive(rt) && spikeCondOf(b)) await spikeSpin();
+        if (rt.stopAll) return;
+        await spikeExecChain(b.sub, rt);
+        if (!rt.stopAll) await spikeExecChain(b.next, rt);
+        return;
+
+      case 'stop_all':
+        rt.stopAll = true;
+        for (const t of spikeThreads) t.stop = true;
+        return;
+
+      case 'broadcast':
+        spikeBroadcast(f.MSG, rt);
+        return;
+
+      // --- silniki ---
+      case 'motor_run': {
+        const m = spikeMotors[f.PORT];
+        if (!m) return;
+        m.on = true;
+        m.pwr = spikeNum(f.PWR);
+        return;
+      }
+      case 'motor_for': {
+        const m = spikeMotors[f.PORT];
+        if (!m) return;
+        m.on = true;
+        m.pwr = Math.max(35, Math.abs(spikeNum(f.PWR) || 50));
+        await spikeSleep(spikeNum(f.SEC) * 1000, rt);
+        if (m && spikeAlive(rt)) { m.on = false; m.pwr = 0; }
+        return;
+      }
+      case 'motor_stop': {
+        const m = spikeMotors[f.PORT];
+        if (!m) return;
+        m.on = false;
+        m.pwr = 0;
+        return;
+      }
+      case 'all_stop':
+        for (const p of SPIKE_PORTS) { spikeMotors[p].on = false; spikeMotors[p].pwr = 0; }
+        return;
+      case 'reset_rot': {
+        const m = spikeMotors[f.PORT];
+        if (m) m.deg = 0;
+        return;
+      }
+      case 'set_power':
+        spikePower = spikeNum(f.PWR);
+        return;
+
+      case 'drive_time': {
+        const pwr = Math.abs(spikeNum(f.PWR));
+        spikePower = pwr;
+        if (!spikeWheelIs('A') && !spikeWheelIs('B')) {
+          spikeNote('⚠️ Brak silnika dużego na porcie A lub B — robot nie pojedzie.', '#ef4444');
+          return;
+        }
+        spikeMotors.A.on = spikeMotors.B.on = true;
+        spikeMotors.A.pwr = spikeMotors.B.pwr = pwr;
+        await spikeSleep(spikeNum(f.SEC) * 1000, rt);
+        if (spikeAlive(rt)) { spikeMotors.A.on = spikeMotors.B.on = false; spikeMotors.A.pwr = spikeMotors.B.pwr = 0; }
+        return;
+      }
+      case 'drive_rot': {
+        const target = Math.abs(spikeNum(f.ROT)) * 360;
+        const pwr = Math.abs(spikePower) || 50;
+        if (!spikeWheelIs('A') && !spikeWheelIs('B')) {
+          spikeNote('⚠️ Brak silnika dużego na porcie A lub B — robot nie pojedzie.', '#ef4444');
+          return;
+        }
+        spikeMotors.A.on = spikeMotors.B.on = true;
+        spikeMotors.A.pwr = spikeMotors.B.pwr = pwr;
+        const startA = spikeMotors.A.deg, startB = spikeMotors.B.deg;
+        while (spikeAlive(rt)) {
+          const done = (Math.abs(spikeMotors.A.deg - startA) + Math.abs(spikeMotors.B.deg - startB)) / 2;
+          if (done >= target) break;
+          await spikeSpin();
+        }
+        if (spikeAlive(rt)) { spikeMotors.A.on = spikeMotors.B.on = false; spikeMotors.A.pwr = spikeMotors.B.pwr = 0; }
+        return;
+      }
+      case 'turn_deg': {
+        const deg = spikeNum(f.DEG);
+        if (!spikeWheelIs('A') && !spikeWheelIs('B')) {
+          spikeNote('⚠️ Brak silnika dużego na porcie A lub B — robot nie skręci.', '#ef4444');
+          return;
+        }
+        const pwr = Math.abs(spikePower) || 50;
+        spikeMotors.A.on = spikeMotors.B.on = true;
+        if (deg >= 0) { spikeMotors.A.pwr = -pwr; spikeMotors.B.pwr = pwr; }
+        else { spikeMotors.A.pwr = pwr; spikeMotors.B.pwr = -pwr; }
+        const start = spikeRobot.a;
+        while (spikeAlive(rt)) {
+          const d = Math.abs(spikeRobot.a - start);
+          if (d >= Math.abs(deg) * Math.PI / 180) break;
+          await spikeSpin();
+        }
+        if (spikeAlive(rt)) { spikeMotors.A.on = spikeMotors.B.on = false; spikeMotors.A.pwr = spikeMotors.B.pwr = 0; }
+        return;
+      }
+
+      // --- światło i dźwięk ---
+      case 'light_color':
+        spikeHub.light = SPIKE_COLOR_HEX[f.COL] || '#22c55e';
+        spikeHub.bright = spikeNum(f.BR);
+        return;
+      case 'lamp_color':
+        spikeLamps[f.PORT] = SPIKE_COLOR_HEX[f.COL] || '#22c55e';
+        if (!spikeHasDevice('lamp')) spikeNote('⚠️ Na porcie ' + f.PORT + ' nie ma lampki LED.', '#ef4444');
+        return;
+      case 'matrix':
+        spikeHub.pattern = f.PAT;
+        spikeHub.pcol = SPIKE_COLOR_HEX[f.COL] || '#fff';
+        return;
+      case 'matrix_off':
+        spikeHub.pattern = '';
+        return;
+      case 'beep':
+        spikeBeep(spikeNum(f.HZ, 440), spikeNum(f.MS, 200));
+        return;
+      default:
+        return;
+    }
+  }
+
+  // łańcuch wykonywany asynchronicznie (wnętrze klocków C)
+  async function spikeExecChain(id, rt) {
+    let cur = id;
+    while (cur && spikeAlive(rt)) {
+      const b = spikeBlocks[cur];
+      if (!b) return;
+      if (SPIKE_DEFS[b.op].shape === 'hat') { cur = b.next; continue; }
+      await spikeRunBlock(b, rt);
+      if (rt.stopAll) return;
+      cur = b.next;
+    }
+  }
+
+  function spikeHasDevice(kind) {
+    return SPIKE_PORTS.some((p) => spikeModel.ports[p] === kind);
+  }
+
+  function spikeBroadcast(msg, rt) {
+    for (const t of spikeThreads) if (t.rootId !== (rt && rt.rootId)) t.stop = true;
+    for (const sid of spikeScripts) {
+      const b = spikeBlocks[sid];
+      if (!b || b.op !== 'hat_recv') continue;
+      if (spikeVal(b, 'MSG') !== msg) continue;
+      if (SPIKE_DEFS[b.op].shape !== 'hat') continue;
+      if (spikeVal(b, 'MSG') === 'start') spikeStartThread(sid);
+      else spikeStartWatcher(sid, msg);
+    }
+  }
+
+  // obserwator: czeka na warunek czapki i odpala resztę skryptu
+  function spikeStartWatcher(rootId, forceMsg) {
+    const b = spikeBlocks[rootId];
+    if (!b) return;
+    const rt = { stop: false, stopAll: false, gen: spikeGen, rootId, watching: true };
+    spikeThreads.push(rt);
+    (async () => {
+      let was = false;
+      while (spikeAlive(rt)) {
+        let now = false;
+        if (b.op === 'hat_recv') now = forceMsg ? true : false;
+        else now = spikeHatTrue(b);
+        if (now && !was) await spikeExecChain(b.next, rt);
+        was = now;
+        await spikeSleep(35, rt);
+      }
+    })();
+  }
+
+  function spikeBeep(hz, ms) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    try {
+      const ac = new AC();
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.frequency.value = hz;
+      gain.gain.value = 0.06;
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.start();
+      osc.stop(ac.currentTime + Math.max(0.05, ms / 1000));
+      osc.onended = () => { try { ac.close(); } catch (e) {} };
+    } catch (e) { /* audio niedostępne — pomijamy */ }
+  }
+
+  // ==========================================================================
+  // START / STOP
+  // ==========================================================================
+  function spikeRun() {
+    spikeStop();
+    spikeReset();
+    spikeRunning = true;
+    spikeGen++;
+    if (!spikeAnim) spikeLoopStart();
+    let started = 0;
+    for (const sid of spikeScripts) {
+      const b = spikeBlocks[sid];
+      if (!b || SPIKE_DEFS[b.op].shape !== 'hat') continue;
+      if (b.op === 'hat_flag') { spikeStartThread(sid); started++; }
+      else if (b.op === 'hat_recv' && spikeVal(b, 'MSG') === 'start') { spikeStartThread(sid); started++; }
+      else spikeStartWatcher(sid);
+    }
+    spikeNote(started
+      ? '▶️ Program działa. Zielona flaga = START, ' + (spikeThreads.length - started) + ' obserwatorów.'
+      : '⚠️ Brak skryptu z zieloną flagą — dodaj klocek „🟢 Gdy naciśnięty START”.', started ? '#22c55e' : '#ef4444');
+  }
+  function spikeStop() {
+    spikeRunning = false;
+    spikeGen++;
+    spikeThreads = [];
+    for (const p of SPIKE_PORTS) {
+      if (!spikeMotors[p]) continue;
+      spikeMotors[p].on = false;
+      spikeMotors[p].pwr = 0;
+    }
+  }
+
+  // ==========================================================================
+  // RENDER — arena + model
+  // ==========================================================================
+  function spikeLoopStart() {
+    if (spikeAnim) cancelAnimationFrame(spikeAnim);
+    spikeLast = 0;
+    spikeAnim = requestAnimationFrame(spikeLoop);
+  }
+  let spikeLast = 0;
+  function spikeLoop(ts) {
+    if (!spikeLast) spikeLast = ts;
+    const dt = Math.min(0.05, (ts - spikeLast) / 1000);
+    spikeLast = ts;
+    if (spikeRunning) spikeUpdate(dt);
+    spikeDraw();
+    spikeHud();
+    spikeAnim = requestAnimationFrame(spikeLoop);
+  }
+
+  function spikeDraw() {
+    const cv = spikeCanvas();
+    const ctx = spikeCtx();
+    if (!cv || !ctx) return;
+    const W = cv.width, H = cv.height;
+    const X = (cm) => cm / SPIKE_CM_PX;
+    const Y = (cm) => cm / SPIKE_CM_PX;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#f9fafb';
+    ctx.fillRect(0, 0, W, H);
+
+    // siatka 10 cm
+    ctx.strokeStyle = 'rgba(0,0,0,.06)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let x = 0; x <= SPIKE_ARENA_W; x += 20) { ctx.moveTo(X(x), 0); ctx.lineTo(X(x), Y(SPIKE_ARENA_H)); }
+    for (let y = 0; y <= SPIKE_ARENA_H; y += 20) { ctx.moveTo(0, Y(y)); ctx.lineTo(X(SPIKE_ARENA_W), Y(y)); }
+    ctx.stroke();
+
+    // kafelki kolorowe / ciemne
+    for (const t of spikeTiles) {
+      ctx.fillStyle = t.kind === 'dark' ? '#374151' : (SPIKE_COLOR_HEX[t.kind] || '#e5e7eb');
+      ctx.globalAlpha = t.kind === 'dark' ? 0.85 : 0.55;
+      ctx.fillRect(X(t.x), Y(t.y), X(t.w), Y(t.h));
+      ctx.globalAlpha = 1;
+    }
+    // ściany
+    for (const w of spikeWalls) {
+      ctx.fillStyle = '#0a4d55';
+      ctx.fillRect(X(w.x), Y(w.y), X(w.w), Y(w.h));
+      ctx.strokeStyle = 'rgba(255,255,255,.35)';
+      ctx.strokeRect(X(w.x), Y(w.y), X(w.w), Y(w.h));
+    }
+
+    // --- promień czujnika odległości ---
+    if (spikeHasSensor('distance')) {
+      const port = SPIKE_PORTS.find((p) => spikeModel.ports[p] === 'distance');
+      const a = spikeRobot.a;
+      const fx = X(spikeRobot.x) + Math.cos(a) * 10;
+      const fy = Y(spikeRobot.y) + Math.sin(a) * 10;
+      const len = Math.min(spikeSensors.distance, 80) * Math.cos(0);
+      ctx.strokeStyle = 'rgba(239,68,68,.75)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      ctx.moveTo(fx, fy);
+      ctx.lineTo(fx + Math.cos(a) * X(len), fy + Math.sin(a) * X(len));
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // echo ściany
+      ctx.fillStyle = 'rgba(239,68,68,.9)';
+      ctx.beginPath();
+      ctx.arc(fx + Math.cos(a) * X(len), fy + Math.sin(a) * X(len), 3, 0, Math.PI * 2);
+      ctx.fill();
+      if (port) spikePortLabel(ctx, fx, fy - 16, port);
+    }
+
+    // --- robot ---
+    const rx = X(spikeRobot.x), ry = Y(spikeRobot.y);
+    ctx.save();
+    ctx.translate(rx, ry);
+    ctx.rotate(spikeRobot.a);
+
+    // koła (silniki duże na A i B)
+    for (const p of ['A', 'B']) {
+      if (!spikeWheelIs(p)) continue;
+      const side = p === 'A' ? -1 : 1;
+      const off = side * 12;
+      ctx.save();
+      ctx.translate(off, 0);
+      ctx.fillStyle = '#1f2937';
+      ctx.beginPath();
+      ctx.roundRect(-5, -9, 10, 18, 4);
+      ctx.fill();
+      ctx.strokeStyle = '#6b7280';
+      ctx.stroke();
+      // znacznik obrotu
+      ctx.strokeStyle = '#fde047';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      const spin = (spikeMotors[p] ? spikeMotors[p].deg : 0) * Math.PI / 180;
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.cos(spin) * 7, Math.sin(spin) * 7);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // obudowa huba
+    ctx.fillStyle = '#e5e7eb';
+    ctx.strokeStyle = '#111827';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.roundRect(-11, -8, 22, 16, 5);
+    ctx.fill();
+    ctx.stroke();
+
+    // dioda huba (światło)
+    if (spikeHub.bright > 0) {
+      ctx.globalAlpha = spikeHub.bright / 100;
+      ctx.fillStyle = spikeHub.light;
+      ctx.beginPath();
+      ctx.arc(0, -4, 3.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    // matryca LED 5×5
+    const pat = spikeHub.pattern ? SPIKE_MATRICES[spikeHub.pattern] : null;
+    ctx.save();
+    ctx.translate(6, 3);
+    for (let r = 0; r < 5; r++) {
+      for (let c = 0; c < 5; c++) {
+        const on = pat && pat[r][c] === '1';
+        ctx.fillStyle = on ? spikeHub.pcol : 'rgba(120,120,130,.22)';
+        ctx.fillRect(c * 2 - 4.6, r * 2 - 4.6, 1.7, 1.7);
+      }
+    }
+    ctx.restore();
+
+    // elementy na portach
+    for (const p of SPIKE_PORTS) {
+      const dev = spikePortDevice(p);
+      if (!dev) continue;
+      if (dev === 'lamp') {
+        const lampCol = spikeLamps[p];
+        if (lampCol) {
+          ctx.fillStyle = lampCol;
+          ctx.beginPath();
+          ctx.arc(0, -10, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+    ctx.restore();
+
+    // --- HUD na canvasie: porty, siła, pozycja ---
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '10px sans-serif';
+    ctx.fillText('X ' + Math.round(spikeRobot.x) + '  Y ' + Math.round(spikeRobot.y) + ' cm', 6, H - 8);
+    ctx.fillText('kierunek ' + Math.round(((spikeRobot.a * 180 / Math.PI) % 360 + 360) % 360) + '°', 6, H - 20);
+    if (spikeSensors.force > 0.3) {
+      ctx.fillStyle = '#ef4444';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText('💥 ' + spikeSensors.force + ' N', W - 74, 14);
+    }
+    if (spikeEditArena) {
+      ctx.fillStyle = '#ff7a00';
+      ctx.font = 'bold 10px sans-serif';
+      ctx.fillText('🗺 TRYB EDYCJY — klik dodaje/usuwa ścianę', 6, 14);
+    }
+  }
+  function spikePortLabel(ctx, x, y, port) {
+    ctx.fillStyle = '#ef4444';
+    ctx.font = 'bold 9px sans-serif';
+    ctx.fillText(port, x, y);
+  }
+
+  // ==========================================================================
+  // HUD (DOM)
+  // ==========================================================================
+  let spikeHudBuilt = false;
+  function spikeHud() {
+    const box = document.getElementById('spikeHud');
+    if (!box) return;
+    if (!spikeHudBuilt) {
+      box.innerHTML =
+        '<div class="spike-read"><span>📡 odległość</span><b id="spikeRd">–</b></div>' +
+        '<div class="spike-read"><span>🎨 kolor</span><b id="spikeRc">–</b></div>' +
+        '<div class="spike-read"><span>💥 siła</span><b id="spikeRf">–</b></div>' +
+        '<div class="spike-read"><span>☀️ jasność</span><b id="spikeRb">–</b></div>' +
+        '<div class="spike-read"><span>🛞 obroty A</span><b id="spikeRm">–</b></div>' +
+        '<div class="spike-read"><span>⚡ moc jazdy</span><b id="spikeRp">–</b></div>' +
+        '<div class="spike-read"><span>🔘 port C</span><b id="spikeRc2">–</b></div>' +
+        '<div class="spike-read"><span>▶️ status</span><b id="spikeRs">–</b></div>' +
+        '<div class="spike-read" style="grid-column:1/-1;"><span>🧠 przyciski huba</span>' +
+          '<span style="display:flex;gap:5px;">' +
+          '<button class="spike-port" data-hubbtn="Lewy" onclick="spikeHubButton(\'Lewy\')">L</button>' +
+          '<button class="spike-port" data-hubbtn="Środkowy" onclick="spikeHubButton(\'Środkowy\')">S</button>' +
+          '<button class="spike-port" data-hubbtn="Prawy" onclick="spikeHubButton(\'Prawy\')">P</button>' +
+          '<span id="spikeRbtn" style="font-size:10px;color:#6b7280;align-self:center;">—</span>' +
+          '</span></div>';
+      spikeHudBuilt = true;
+    }
+    const set = (id, v, off) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = v;
+      const row = el.closest('.spike-read');
+      if (row) row.classList.toggle('off', !!off);
+    };
+    set('spikeRd', spikeHasSensor('distance') ? Math.round(spikeSensors.distance) + ' cm' : 'brak czujnika', !spikeHasSensor('distance'));
+    set('spikeRc', spikeHasSensor('color') ? spikeSensors.color : 'brak czujnika', !spikeHasSensor('color'));
+    set('spikeRf', spikeHasSensor('force') ? spikeSensors.force + ' N' : 'brak czujnika', !spikeHasSensor('force'));
+    set('spikeRb', spikeHasSensor('light') ? Math.round(spikeSensors.bright) + ' %' : 'brak czujnika', !spikeHasSensor('light'));
+    set('spikeRm', Math.round(spikeMotors.A ? spikeMotors.A.deg : 0) + '°');
+    set('spikeRp', Math.round(spikePower) + ' %');
+    set('spikeRc2', spikePortDevice('C') ? SPIKE_DEVICES[spikePortDevice('C')].name : 'wolny');
+    set('spikeRs', spikeRunning ? 'działa' : 'zatrzymany');
+    const bb = document.getElementById('spikeRbtn');
+    if (bb) {
+      const held = Object.keys(spikeHub.btn).filter((k) => spikeHub.btn[k]).join(', ');
+      bb.textContent = held || '—';
+    }
+    for (const b of document.querySelectorAll('[data-hubbtn]')) {
+      b.classList.toggle('filled', !!spikeHub.btn[b.dataset.hubbtn]);
+    }
+  }
+  function spikeHubButton(name) {
+    spikeHub.btn[name] = !spikeHub.btn[name];
+    spikeNote((spikeHub.btn[name] ? '🔘 Wciśnięty przycisk huba: ' : '🔘 Puszczony przycisk huba: ') + name,
+      spikeHub.btn[name] ? '#22c55e' : '#6b7280');
+  }
+
+  // ==========================================================================
+  // ARENA — tryb edycji
+  // ==========================================================================
+  function spikeOpenArena() {
+    spikeEditArena = !spikeEditArena;
+    spikeNote(spikeEditArena
+      ? '🗺 Tryb edycji areny: kliknij, aby dodać ścianę; klik na ścianę, aby ją usunąć.'
+      : '🗺 Tryb edycji areny wyłączony.', spikeEditArena ? '#ff7a00' : '#6b7280');
+  }
+  function spikeArenaClick(e) {
+    if (!spikeEditArena) return;
+    const cv = spikeCanvas();
+    if (!cv) return;
+    const r = cv.getBoundingClientRect();
+    const cmX = (e.clientX - r.left) * (cv.width / r.width) * SPIKE_CM_PX;
+    const cmY = (e.clientY - r.top) * (cv.height / r.height) * SPIKE_CM_PX;
+    const hit = spikeWalls.findIndex((w) => cmX >= w.x - 2 && cmX <= w.x + w.w + 2 && cmY >= w.y - 2 && cmY <= w.y + w.h + 2);
+    if (hit >= 0) spikeWalls.splice(hit, 1);
+    else spikeWalls.push({ x: Math.round(cmX - 6), y: Math.round(cmY - 6), w: 12, h: 12 });
+  }
+
+  // ==========================================================================
+  // PRZYKŁAD + INIT
+  // ==========================================================================
+  // Buduje skrypt z listy opcode'ów (klocki C dostają puste jamy)
+  function spikeChain(ops, fields) {
+    let head = null, prev = null;
+    for (const op of ops) {
+      const b = spikeNewBlock(op);
+      if (!b) continue;
+      if (fields && fields[op]) Object.assign(b.f, fields[op]);
+      if (prev) { prev.next = b.id; b.parent = prev.id; b.ps = 'next'; }
+      else head = b.id;
+      prev = b;
+    }
+    return head;
+  }
+  function spikeAttachAfterFields(anchorId, ops, fields) {
+    let cur = anchorId;
+    for (const op of ops) {
+      const b = spikeNewBlock(op);
+      if (!b) continue;
+      spikeAttachAfter(cur, b.id);
+      cur = b.id;
+      if (fields && fields[op]) Object.assign(b.f, fields[op]);
+    }
+    return cur;
+  }
+
+  function spikeExample() {
+    spikeStop();
+    spikeBlocks = {};
+    spikeScripts = [];
+    spikeSeq = 1;
+
+    // 1) zielona flaga: ustaw moc, objedź kwadrat, na końcu pokaż wzór
+    const flag = spikeNewBlock('hat_flag');
+    spikeScripts.push(flag.id);
+
+    // moc silników ustawiamy PRZED pętlą
+    const pw = spikeAttachAfterFields(flag.id, ['set_power'], { set_power: { PWR: 55 } });
+
+    const rep = spikeNewBlock('repeat');
+    rep.f.N = 4;
+    spikeAttachAfter(pw, rep.id);
+
+    // wnętrze pętli: jedź kawałek drogi, potem skręć o 90°
+    const body = spikeChain(['drive_time', 'turn_deg'],
+      { drive_time: { SEC: 1.2, PWR: 55 }, turn_deg: { DEG: 90 } });
+    spikeAttachSub(rep.id, body);
+
+    // to wykonuje się PO zakończeniu pętli
+    spikeAttachAfterFields(rep.id, ['light_color', 'matrix'],
+      { light_color: { COL: 'pomarańczowy', BR: 90 }, matrix: { PAT: 'uśmiech', COL: 'pomarańczowy' } });
+
+    const b0 = spikeBlocks[flag.id];
+    b0.x = 16; b0.y = 16;
+
+    // 2) obserwator: gdy blisko przeszkody — cofnij i zapal czerwone
+    const hd = spikeNewBlock('hat_distance');
+    hd.f.CM = 26;
+    spikeScripts.push(hd.id);
+    spikeAttachAfter(hd.id, spikeChain(['drive_time', 'turn_deg', 'light_color', 'matrix'],
+      { drive_time: { SEC: 1, PWR: 60 }, turn_deg: { DEG: -110 }, light_color: { COL: 'czerwony', BR: 100 }, matrix: { PAT: 'wykrzyknik', COL: 'czerwony' } }));
+    const h0 = spikeBlocks[hd.id];
+    h0.x = 16; h0.y = 300;
+
+    spikeRenderWorkspace();
+    spikeSave();
+    spikePaletteTab('blocks');
+    spikeNote('✨ Wczytano przykład: kwadrat + reakcja na przeszkodę. Kliknij ▶️ Uruchom.', '#22c55e');
+  }
+
+  function spikeInit() {
+    const m = spikeLocalGet(SPIKE_MODEL_KEY, null);
+    if (m && m.ports) spikeModel = m;
+    if (!spikeWalls.length) spikeDefaultArena();
+    spikeLoad();
+    spikeRenderParts();
+    spikeRenderPalette();
+    spikeRenderWorkspace();
+    spikeReset();
+    spikeBind();
+    spikeLoopStart();
+  }
+  function spikeStopLoop() {
+    if (spikeAnim) cancelAnimationFrame(spikeAnim);
+    spikeAnim = null;
+    spikeStop();
+  }
+  function spikeBind() {
+    if (spikeBound) return;
+    spikeBound = true;
+    // przeciąganie klocków z palety
+    document.addEventListener('pointerdown', (e) => {
+      const pal = document.getElementById('spikePalette');
+      if (!pal) return;
+      const blk = e.target.closest ? e.target.closest('.spike-block') : null;
+      if (!blk || !blk.dataset.op) return;
+      if (!pal.contains(blk)) return;
+      e.preventDefault();
+      spikeStartDrag(e, blk.dataset.op, null);
+    });
+    // przeciąganie klocków w warsztacie
+    const ws = document.getElementById('spikeWs');
+    if (ws) {
+      ws.addEventListener('pointerdown', (e) => {
+        const row = e.target.closest ? e.target.closest('.spike-row') : null;
+        if (!row) return;
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+        const blk = e.target.closest('.spike-block');
+        if (!blk || !blk.dataset.id) return;
+        e.preventDefault();
+        spikeStartDrag(e, null, blk.dataset.id);
+      });
+      // klik w skrypt = usuń
+      ws.addEventListener('contextmenu', (e) => {
+        const blk = e.target.closest ? e.target.closest('.spike-block') : null;
+        if (!blk || !blk.dataset.id) return;
+        e.preventDefault();
+        spikeDeleteBlock(blk.dataset.id);
+      });
+    }
+    const cv = spikeCanvas();
+    if (cv) cv.addEventListener('click', spikeArenaClick);
+  }
+  function spikeDeleteBlock(id) {
+    const b = spikeBlocks[id];
+    if (!b) return;
+    // zawartość jam klocków C ginie razem z nim (wraz z całym łańcuchem w jamie)
+    const killSub = (x) => {
+      if (!x) return;
+      const bb = spikeBlocks[x];
+      if (!bb) return;
+      killSub(bb.sub);
+      killSub(bb.elsub);
+      killSub(bb.next);
+      delete spikeBlocks[x];
+    };
+    killSub(b.sub);
+    killSub(b.elsub);
+    // klocki następujące za tym blokiem wypchnij się w jego miejsce (jak w Scratchu)
+    spikeDetach(id);
+    delete spikeBlocks[id];
+    spikeScripts = spikeScripts.filter((s) => spikeBlocks[s]);
+    spikeRenderWorkspace();
+    spikeSave();
+    spikeNote('🗑 Usunięto klocek (prawy przycisk = usuń).', '#6b7280');
+  }
 </script>
 
 </body>
