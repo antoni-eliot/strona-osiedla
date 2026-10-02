@@ -22,6 +22,14 @@ win.HTMLCanvasElement.prototype.getContext = () => ctx();
 win.fetch = () => Promise.reject(new Error('offline'));
 win.requestAnimationFrame = (cb) => setTimeout(() => cb(Date.now()), 16);
 win.cancelAnimationFrame = (id) => clearTimeout(id);
+// jsdom nie ma PointerEvent - podmieniamy na MouseEvent z clientX/Y i pointerId
+class TestPointerEvent extends win.MouseEvent {
+  constructor(type, o = {}) { super(type, o); this.pointerId = o.pointerId ?? 1; this.isPrimary = true; }
+}
+win.PointerEvent = TestPointerEvent;
+const pe = (type, o = {}) => new TestPointerEvent(type, o);
+const dragOf = () => v('spikeDrag');
+const ghostEl = () => doc.querySelector('#spikeWs .spike-ghost');
 
 let failed = 0;
 const ok = (l, c, x) => { console.log((c ? '  PASS  ' : '  FAIL  ') + l + (x !== undefined ? '  → ' + x : '')); if (!c) failed++; };
@@ -193,6 +201,44 @@ const B = () => v('spikeBlocks');
   ok('jedno koło jedzie z połową prędkości', Math.abs(one.dist - two.dist / 2) < 0.01,
      one.dist.toFixed(2) + ' cm vs ' + (two.dist / 2).toFixed(2) + ' cm');
   setPorts({ A: 'motorL', B: 'motorL' });
+
+  // ── BUG 7: duch przeciąganego klocka znikał natychmiast ───────────────
+  // spikeRenderWorkspace() czyści #spikeWs przez innerHTML='', a był wołany
+  // PO dołączeniu ducha - blok przeciągany był całkiem niewidoczny.
+  console.log('\n=== BUG 7: duch przeciąganego klocka ===');
+  win.spikeClearScripts();
+  const dragBlk = win.spikeNewBlock('wait');
+  B()[dragBlk.id].f.SEC = 3.5;               // użytkownik zmienił wartość ręcznie
+  win.spikeAttachTop(dragBlk.id, 20, 20);
+  win.spikeRenderWorkspace();
+  const grabRow = doc.querySelector('#spikeWs .spike-row');
+  ok('klocek jest w warsztacie', !!grabRow);
+  grabRow.dispatchEvent(pe('pointerdown', { clientX: 40, clientY: 60, bubbles: true, pointerId: 1 }));
+  ok('przeciąganie wystartowało', !!dragOf(), 'op=' + (dragOf() ? dragOf().op : '-'));
+  ok('duch jest w DOM', !!ghostEl());
+  ok('duch podłączony do #spikeWs', dragOf()?.ghost?.parentNode?.id === 'spikeWs');
+  ok('duch ma gradient kategorii', /spike-cat-\w+/.test(dragOf()?.ghost?.className || ''), dragOf()?.ghost?.className);
+  ok('duch pokazuje zmienioną wartość, nie domyślną', ghostEl()?.querySelector('.spike-in')?.value == '3.5',
+     'wartość=' + ghostEl()?.querySelector('.spike-in')?.value);
+  ok('duch nie podszywa się pod prawdziwy blok', !ghostEl().dataset.id);
+  doc.dispatchEvent(pe('pointermove', { clientX: 300, clientY: 180, bubbles: true, pointerId: 1 }));
+  ok('duch podąża za kursorem', ghostEl().style.left !== '0px', 'left=' + ghostEl().style.left);
+  doc.dispatchEvent(pe('pointerup', { clientX: 300, clientY: 180, bubbles: true, pointerId: 1 }));
+  ok('duch znika po upuszczeniu', !ghostEl());
+  ok('stan przeciągania wyczyszczony', dragOf() === null || typeof dragOf() !== 'object');
+  ok('klocek wrócił do warsztatu', doc.querySelectorAll('#spikeWs .spike-block').length >= 1);
+  ok('wartość przetrwała upuszczenie', String(B()[dragBlk.id].f.SEC) === '3.5');
+
+  console.log('\n=== duch klocka z palety ===');
+  const palItem = doc.querySelector('#spikePalette .spike-block');
+  ok('klocek w palecie', !!palItem, palItem?.dataset.op);
+  palItem.dispatchEvent(pe('pointerdown', { clientX: 10, clientY: 10, bubbles: true, pointerId: 2 }));
+  ok('przeciąganie z palety działa', !!dragOf() && dragOf().fromPalette === true);
+  ok('duch z palety widoczny', !!ghostEl());
+  ok('duch z palety pokazuje właściwy klocek', ghostEl()?.dataset.op === palItem.dataset.op, palItem.dataset.op);
+  doc.dispatchEvent(pe('pointerup', { clientX: 300, clientY: 200, bubbles: true, pointerId: 2 }));
+  win.spikeClearScripts();
+  win.spikeRenderWorkspace();
 
   // ── tekstury klocków: gradient kategorii, wypustki, faza ───────────────
   console.log('\n=== tekstury klocków ===');

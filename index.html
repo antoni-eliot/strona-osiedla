@@ -8011,6 +8011,7 @@
         const inp = document.createElement('input');
         inp.type = 'number';
         inp.className = 'spike-in';
+        inp.dataset.field = part[1];
         inp.value = vals && vals[part[1]] !== undefined ? vals[part[1]] : part[2];
         inp.min = part[3]; inp.max = part[4]; inp.step = part[5];
         if (id) {
@@ -8029,6 +8030,7 @@
       } else if (part[0] === 's') {
         const sel = document.createElement('select');
         sel.className = 'spike-sel';
+        sel.dataset.field = part[1];
         const def = vals && vals[part[1]] !== undefined ? vals[part[1]] : part[3];
         for (const o of part[2]) {
           const opt = document.createElement('option');
@@ -8426,10 +8428,33 @@
 
     // odłączamy przed przeciąganiem (żeby móc upuścić w inne miejsce)
     if (!fromPalette) spikeDetach(id);
+    // BUG: render MUSI być przed stworzeniem ducha. spikeRenderWorkspace() czyści
+    // #spikeWs przez innerHTML = '', więc duch dołączony wcześniej znikał natychmiast
+    // i przeciągany klocek był niewidoczny (draggable bez podglądu).
+    spikeRenderWorkspace();
+
     const ghost = spikeBuildBlock(op, null, false);
     // ghost pokazuje tylko ten jeden klocek (bez potomków), żeby był lekki
     for (const child of Array.from(ghost.querySelectorAll('.spike-body'))) child.remove();
     ghost.classList.add('spike-ghost');
+    // duch ma pokazywać aktualne wartości pól, a nie domyślne definicji
+    if (id) {
+      const live = spikeBlocks[id];
+      if (live) {
+        for (const inp of ghost.querySelectorAll('.spike-in')) {
+          const nm = inp.dataset.field;
+          if (nm && live.f[nm] !== undefined) inp.value = live.f[nm];
+        }
+        for (const sel of ghost.querySelectorAll('.spike-sel')) {
+          const nm = sel.dataset.field;
+          if (nm && live.f[nm] !== undefined) sel.value = live.f[nm];
+        }
+        for (const sock of ghost.querySelectorAll('.spike-slot .spike-num')) {
+          const nm = sock.parentElement && sock.parentElement.dataset.slot;
+          if (nm && live.f[nm] !== undefined) sock.value = live.f[nm];
+        }
+      }
+    }
     const ws = document.getElementById('spikeWs');
     if (ws) ws.appendChild(ghost);
 
@@ -8442,7 +8467,6 @@
     document.addEventListener('pointermove', spikeDragMove);
     document.addEventListener('pointerup', spikeDragEnd);
     spikeDragMove(e);
-    spikeRenderWorkspace();
   }
 
   function spikeDragMove(e) {

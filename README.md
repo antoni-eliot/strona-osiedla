@@ -184,6 +184,7 @@ na jednej stronie — bez backendu.
 - **Operatory** `+ − × ÷`, `porównania`, `i / lub / nie`, losowo — **gniazda matematyczne przyjmują reportery**, więc da się ułożyć `odległość < 20`
 - Gniazda okrągłe (reportersy i warunki) przyjmują się w gniazdach innych klocków; **puste gniazdo matematyczne to pole z liczbą**
 - Klocki przeciąga się myszą z palety do warsztatu; wskazują się w pionie, wsuwają w jamy klocków C i w gniazda. **Prawy przycisk kasuje klocek**
+- **Trzymany klocker podąża za kursorem** — kopia z widoczną aktualną wartością pól, więc widać co się przenosi (tak jak w Scratchu). Miejsce upuszczenia od razu się podświetla
 - Program jest zapisywany w `localStorage` (`osiedle_spike_scripts`)
 
 ### Arena i symulacja
@@ -199,12 +200,12 @@ na jednej stronie — bez backendu.
 npm install     # tylko do testów (jsdom)
 npm test
 ```
-Trzy pliki, 73 asercje, wszystkie na prawdziwym `index.html` w jsdom:
+Trzy pliki, 89 asercji, wszystkie na prawdziwym `index.html` w jsdom:
 
 | Plik | Co pilnuje |
 |---|---|
 | `test/boot.test.mjs` | strona wstaje **także bez `localStorage`** (tryb prywatny, sandbox, `file://`) — wyjątek przy starcie zabijał cały skrypt |
-| `test/spike.test.mjs` | interpreter klocków, napęd różnicowy (dwa koła vs jedno), trwałość modelu i skryptów, tekstury klocków |
+| `test/spike.test.mjs` | interpreter klocków, napęd różnicowy (dwa koła vs jedno), **duch przeciąganego klocka**, trwałość modelu i skryptów, tekstury klocków |
 | `test/handlers.test.mjs` | każdy handler `onclick`/`oninput` wskazuje na istniejącą funkcję — chroni przed literówką, która wycisza przycisk |
 
 ### Wygląd klocków
