@@ -199,6 +199,18 @@ na jednej stronie — bez backendu.
 npm install     # tylko do testów (jsdom)
 npm test
 ```
-Testy uruchamiają prawdziwy `index.html` w jsdom i sprawdzają m.in., że kod po klocku
-C się wykonuje, wstawianie klocków nie gubi łańcucha, a każdy handler inline
-wskazuje na istniejącą funkcję.
+Trzy pliki, 73 asercje, wszystkie na prawdziwym `index.html` w jsdom:
+
+| Plik | Co pilnuje |
+|---|---|
+| `test/boot.test.mjs` | strona wstaje **także bez `localStorage`** (tryb prywatny, sandbox, `file://`) — wyjątek przy starcie zabijał cały skrypt |
+| `test/spike.test.mjs` | interpreter klocków, napęd różnicowy (dwa koła vs jedno), trwałość modelu i skryptów, tekstury klocków |
+| `test/handlers.test.mjs` | każdy handler `onclick`/`oninput` wskazuje na istniejącą funkcję — chroni przed literówką, która wycisza przycisk |
+
+### Wygląd klocków
+Klocki nie są płaskim kolorem — każdy dostaje gradient z trzech odcieni kategorii,
+fazowane krawędzie (światło u góry, cień u dołu), **wypustki LEGO** wzdłuż górnej
+krawędzi i pochyły połysk plastiku ABS. Reportery i warunki to gładkie płytki bez
+wypustków. Wartości liczbowe są wtopione w klocek, a puste gniazdo wygląda jak
+wydrążenie. Kolor kategorii siedzi w zmiennych `--c1/--c2/--c3`, więc nowy klocek
+nie wymaga osobnych reguł tła.

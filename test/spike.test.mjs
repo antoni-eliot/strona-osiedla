@@ -194,6 +194,43 @@ const B = () => v('spikeBlocks');
      one.dist.toFixed(2) + ' cm vs ' + (two.dist / 2).toFixed(2) + ' cm');
   setPorts({ A: 'motorL', B: 'motorL' });
 
+  // ── tekstury klocków: gradient kategorii, wypustki, faza ───────────────
+  console.log('\n=== tekstury klocków ===');
+  const css = doc.querySelector('style').textContent;
+  const blockRule = (css.match(/\.spike-block\s*\{([^}]*)\}/) || [, ''])[1];
+  ok('.spike-block ma gradient (nie płaskie tło)', /linear-gradient/.test(blockRule));
+  ok('.spike-block ma fazowane krawędzie', /box-shadow/.test(blockRule));
+  ok('.spike-block ma wypustki (::before)', /\.spike-block::before\s*\{/.test(css));
+  ok('klocki gładkie bez wypustków', /\.spike-reporter::before/.test(css));
+  // każda kategoria musi dawać 3 odcienie, inaczej gradient wypada na przezroczysty
+  const CATS = ['ev', 'mo', 'li', 'se', 'ct', 'op'];
+  let shadesOk = true;
+  for (const c of CATS) {
+    const rule = (css.match(new RegExp('\\.spike-cat-' + c + '\\s*\\{([^}]*)\\}')) || [, ''])[1];
+    if (!/--c1:/.test(rule) || !/--c2:/.test(rule) || !/--c3:/.test(rule)) shadesOk = false;
+  }
+  ok('wszystkie 6 kategorii ma 3 odcienie', shadesOk, CATS.join(','));
+  // kategoria nie może nadpisywać tła na płaskie - zabiłoby gradient
+  ok('brak płaskich background w .spike-cat-*', !/\.spike-cat-\w+\s*\{[^}]*background\s*:/.test(css));
+  // realnie zbudowane klocki muszą dostać klasę kategorii (bo kolor bierze się z CSS)
+  const pwrId = win.spikeNewBlock('set_power');
+  const pwrEl = win.spikeBuildBlock('set_power', pwrId);
+  ok('klocek mo ma gradient kategorii', /\bspike-cat-mo\b/.test(pwrEl.className), pwrEl.className);
+  ok('klocek ma wiersz treści', pwrEl.querySelector('.spike-row') !== null);
+  ok('pole liczbowe wtopione w klocek', !!pwrEl.querySelector('.spike-in'),
+     pwrEl.querySelector('.spike-in')?.value);
+  const addId = win.spikeNewBlock('add');
+  const addEl = win.spikeBuildBlock('add', addId);
+  ok('reporter op ma zaokrąglony kształt', /\bspike-reporter\b/.test(addEl.className), addEl.className);
+  ok('reporter dostaje gradient kategorii', /\bspike-cat-op\b/.test(addEl.className));
+  const typed = addEl.querySelectorAll('.spike-slot[data-typed="1"]');
+  ok('puste gniazdo matematyczne ma data-typed', typed.length === 2, 'gniazd: ' + typed.length);
+  ok('gniazdo zawiera licznik .spike-num', !!addEl.querySelector('.spike-slot .spike-num'));
+  const gtEl = win.spikeBuildBlock('gt', win.spikeNewBlock('gt'));
+  ok('blok warunkowy ma kształt boolean', /\bspike-boolean\b/.test(gtEl.className), gtEl.className);
+  const card = doc.querySelector('.spike-part');
+  ok('karta elementu ma dwa wypustki', !!card && /\.spike-part::before/.test(css) && /\.spike-part::after/.test(css));
+
   // ── trwałość ────────────────────────────────────────────────────────────
   console.log('\n=== trwałość ===');
   win.spikeSave();
