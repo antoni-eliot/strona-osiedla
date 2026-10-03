@@ -131,9 +131,9 @@ Ustawienia mapy:
 | **Boty** | 0–7 sztuk, z własnymi nickami (puste pola dostają domyślne) |
 | **Tryb wyścigów** | start na trójce, liczy się pierwszy na mecie, `R` powtarza wyścig |
 
-Przyciski **🌿 Wszystkie lilie / 💧 Cała woda / 🎲 Losowo** wypełniają siatkę hurtowo, a **💾 Zapisz** zapisuje mapę prywatnie w `localStorage` (klucz `osiedle_frog_maps_private`, maks. 24 mapy). **📤 Kod / 📥 Wklej kod** przenosi mapę na inny sprzęt (base64 z JSON).
+Przyciski **🌿 Wszystkie lilie / 💧 Cała woda / 🎲 Losowo** wypełniają siatkę hurtowo. **💾 Zapisz** zapisuje mapę prywatnie w `localStorage` (klucz `osiedle_frog_maps_private`, maks. 24 mapy), a **💾 Zapisz i graj** robi to samo, tylko od razu zamyka edytor (zajmuje cały ekran) i wpuszcza na ten staw — inaczej zapisana mapa zostaje niewidoczna. **🆕 Nowa** wstawia do edytora czystą siatkę. **📤 Kod / 📥 Wklej kod** przenosi mapę na inny sprzęt (base64 z JSON).
 
-Edytor pilnuje jednej rzeczy, której nie widać na oku: przy zapisie sprawdza przejście od punktów startowych do mety dokładnie tymi samymi skokami, jakie obowiązują w grze (odległość ≤ 3 liści, po Euklidesie). Jeśli staw jest nieprzechodni, dostaniesz ostrzeżenie **⚠️ Nie ma drogi do mety!** — mapa i tak się zapisuje, bo w trakcie malowania nieprzechodni układ bywa normalny.
+Edytor pilnuje jednej rzeczy, której nie widać na oku: przy zapisie sprawdza przejście od punktów startowych do mety dokładnie tymi samymi skokami, jakie obowiązują w grze (odległość ≤ 3 liści, po Euklidesie). Jeśli staw jest nieprzechodni, dostaniesz ostrzeżenie **⚠️ Nie ma drogi do mety!** — mapa i tak się zapisuje, bo w trakcie malowania nieprzechodni układ bywa normalny. Przy **Zapisz i graj** gra nie startuje wtedy wcale, tylko wraca do menu z tym samym ostrzeżeniem — na nieprzechodnim stawie nie ma co wskazywać.
 
 Własne mapy, tak jak skiny, **zostają w tej przeglądarce** i nie należą do `SYNC_KEYS`. Do wspólnego stawu trafiają dopiero jako konfiguracja pokoju (patrz niżej).
 

@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "test": "node test/boot.test.mjs && node test/spike.test.mjs && node test/handlers.test.mjs"
+    "test": "node test/boot.test.mjs && node test/spike.test.mjs && node test/frog.test.mjs && node test/music.test.mjs && node test/handlers.test.mjs"
   },
   "dependencies": {},
   "devDependencies": {

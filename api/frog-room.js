@@ -47,27 +47,39 @@ function gc() {
 
 function cleanNick(v) { return String(v || '').replace(/[<>]/g, '').trim().slice(0, 16) || 'Żabka'; }
 
+// liczba z zadanym zakresem i wartością zapasową. Nie używamy "|| wartosc",
+// bo 0 jest tu dobre (suchy staw, staw bez botów) i musi przetrwać.
+function clampNum(v, lo, hi, def) {
+  if (v === null || v === undefined || v === '') return def;
+  const n = Math.round(Number(v));
+  return Math.max(lo, Math.min(hi, Number.isFinite(n) ? n : def));
+}
+
 // konfiguracja stawu od właściciela: bierzemy tylko to, co rozumiemy, i trzymamy
 // w limicie, żeby gracz nie wcisnął serwerowi 10 MB siatki
 function cleanConfig(input) {
   const c = input && typeof input === 'object' ? input : {};
   const out = { race: !!c.race };
   if (typeof c.mapId === 'string') out.mapId = c.mapId.slice(0, 40);
-  if (c.custom && typeof c === 'object') {
-    const cols = Math.round(Number(c.cols)), rows = Math.round(Number(c.rows));
+  if (c.custom && typeof c.custom === 'object') {
+    // układ leży w config.custom, a nie w config — wcześniej czytaliśmy
+    // cols/cells z samego config, więc żadna własna mapa nie przechodziła
+    // walidacji i goście dostawali staw bez własnej siatki
+    const k = c.custom;
+    const cols = Math.round(Number(k.cols)), rows = Math.round(Number(k.rows));
     if (cols >= 6 && cols <= 30 && rows >= 8 && rows <= 40 && cols * rows <= MAX_CELLS) {
-      const cells = String(c.cells || '').replace(/[^pws]/g, '');
+      const cells = String(k.cells || '').replace(/[^pws]/g, '');
       if (cells.length === cols * rows) {
         out.custom = {
-          id: String(c.id || 'cm_shared').slice(0, 40),
-          name: String(c.name || 'Staw właściciela').slice(0, 24),
+          id: String(k.id || 'cm_shared').slice(0, 40),
+          name: String(k.name || 'Staw właściciela').slice(0, 24),
           cols, rows, cells,
-          goals: (Array.isArray(c.goals) ? c.goals : []).map(Number).filter(n => Number.isInteger(n) && n >= 0 && n < cols),
-          spawns: (Array.isArray(c.spawns) ? c.spawns : []).map(Number).filter(n => Number.isInteger(n) && n >= 0 && n < cols),
-          foodPct: Math.max(0, Math.min(200, Math.round(Number(c.foodPct) || 100))),
-          padColor: /^#[0-9a-fA-F]{6}$/.test(c.padColor) ? c.padColor : '#5fb84a',
-          bots: Math.max(0, Math.min(7, Math.round(Number(c.bots) || 0))),
-          botNicks: (Array.isArray(c.botNicks) ? c.botNicks : []).map(cleanNick).slice(0, 7),
+          goals: (Array.isArray(k.goals) ? k.goals : []).map(Number).filter(n => Number.isInteger(n) && n >= 0 && n < cols),
+          spawns: (Array.isArray(k.spawns) ? k.spawns : []).map(Number).filter(n => Number.isInteger(n) && n >= 0 && n < cols),
+          foodPct: clampNum(k.foodPct, 0, 200, 100),
+          padColor: /^#[0-9a-fA-F]{6}$/.test(k.padColor) ? k.padColor : '#5fb84a',
+          bots: clampNum(k.bots, 0, 7, 0),
+          botNicks: (Array.isArray(k.botNicks) ? k.botNicks : []).map(cleanNick).slice(0, 7),
           race: out.race
         };
         if (!out.custom.goals.length) out.custom.goals = [Math.floor(cols / 2)];

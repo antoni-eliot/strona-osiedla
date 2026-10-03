@@ -899,10 +899,13 @@
   }
   .frog-ed-side { flex: 0 1 300px; display: flex; flex-direction: column; gap: 9px; }
   .frog-fld { display: block; font-size: 11px; font-weight: 700; color: #14532d; }
-  .frog-fld input[type=text], .frog-fld input:not([type]) {
+  .frog-fld input[type=text], .frog-fld input:not([type]), .frog-fld input:not([type=range]):not([type=color]):not([type=checkbox]) {
     width: 100%; margin-top: 3px; padding: 6px 8px; font-size: 13px; font-weight: 500;
     border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box;
   }
+  .frog-code-row { display: flex; gap: 5px; margin-top: 3px; align-items: center; }
+  .frog-code-row input { flex: 1; min-width: 0; font-family: ui-monospace, Menlo, Consolas, monospace !important; font-size: 11px !important; }
+  .frog-code-row .frog-btn { flex: none; padding: 6px 9px; font-size: 11px; }
   .frog-fld input[type=number] {
     width: 100%; margin-top: 3px; padding: 6px 8px; font-size: 13px;
     border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box;
@@ -1622,6 +1625,26 @@
 
   /* lista elementów modelu (hub + porty) */
   .spike-parts { display: flex; flex-direction: column; gap: 8px; max-height: 430px; overflow-y: auto; }
+  /* pasek podpiętych elementów - widoczny także w zakładce Klocki,
+     bo programując trzeba wiedzieć co jest wpięte w porty */
+  .spike-mounted {
+    display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
+    padding: 7px 8px; margin-bottom: 9px;
+    border-radius: 9px;
+    border: 1px solid var(--t-border, #d1d5db);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.03));
+    font-size: 11px; font-weight: 700; color: var(--t-muted, #6b7280);
+  }
+  .spike-mounted:empty { display: none; }
+  .spike-mounted-t { letter-spacing: 0.04em; text-transform: uppercase; font-size: 9.5px; }
+  .spike-chip {
+    display: inline-flex; align-items: center; gap: 3px;
+    padding: 2px 7px 2px 5px; border-radius: 999px;
+    background: #102a2e; color: #e8fbff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 1px 1px rgba(0, 0, 0, 0.18);
+  }
+  .spike-chip.empty { background: #9aa2ad; }
+  .spike-chip b { font-size: 9.5px; opacity: 0.85; font-weight: 800; }
   .spike-part {
     position: relative;
     border: 1px solid var(--t-border, #d1d5db);
@@ -2349,13 +2372,23 @@
                       <button class="frog-btn alt" onclick="frogEdFill(0)">💧 Cała woda</button>
                       <button class="frog-btn alt" onclick="frogEdScatter()">🎲 Losowo</button>
                     </div>
+                    <div class="frog-fld">Kod stawu
+                      <div class="frog-code-row">
+                        <input id="frogEdCode" readonly placeholder="Zapisz staw, aby dostać kod">
+                        <button class="frog-btn alt" onclick="frogEdMakeCode()" title="Utwórz kod z tego stawu">🔑 Generuj</button>
+                        <button class="frog-btn alt" onclick="frogEdCopyCode()" title="Skopiuj kod do schowka">📋 Kopiuj</button>
+                      </div>
+                      <input id="frogEdCodeIn" placeholder="Wklej kod, aby wczytać staw" style="margin-top:6px;">
+                      <button class="frog-btn alt" onclick="frogEdLoadCode()" style="margin-top:6px;">📥 Wczytaj z kodu</button>
+                    </div>
                     <div class="frog-fld-row">
-                      <button class="frog-btn" onclick="frogEdSave()">💾 Zapisz</button>
+                      <button class="frog-btn" onclick="frogEdSave(true)">💾 Zapisz i graj</button>
+                      <button class="frog-btn alt" onclick="frogEdSave()">💾 Zapisz</button>
                       <button class="frog-btn alt" onclick="frogEdExport()">📤 Kod</button>
                       <button class="frog-btn alt" onclick="frogEdImport()">📥 Wklej kod</button>
                     </div>
                     <div class="frog-fld-row">
-                      <button class="frog-btn alt" onclick="frogEdNew()">🆕 Nowa</button>
+                      <button class="frog-btn alt" onclick="frogEdNewMap()">🆕 Nowa</button>
                       <button class="frog-btn alt" onclick="frogEdClose()">✖️ Anuluj</button>
                     </div>
                     <div class="frog-log" id="frogEdLog" style="max-height:70px;"></div>
@@ -2371,6 +2404,7 @@
             <button class="frog-btn" onclick="frogStart()">▶️ Start</button>
             <button class="frog-btn alt" onclick="frogOpenMenu()">🏠 Menu</button>
             <button class="frog-btn alt" data-frog-view onclick="frogViewToggle()">🗺 Widok 2D</button>
+            <button class="frog-btn alt" id="frogSwitchPondBtn" onclick="frogSwitchPond()">🔀 Przełącz staw</button>
             <button class="frog-btn alt" data-frog-sfx onclick="frogSfxToggle()">🔊 Dźwięk</button>
             <button class="frog-btn alt" data-frog-fs onclick="frogFullscreen()">⛶ Pełny ekran</button>
           </div>
@@ -2418,6 +2452,7 @@
 
               <!-- zakładka Klocki -->
               <div id="spikeBlocksPane" class="hidden">
+                <div class="spike-mounted" id="spikeMounted"></div>
                 <div class="spike-pal" id="spikePalette"></div>
                 <p class="spike-legend" style="margin-top:8px;">
                   Przeciągnij klocek do <b>skryptu</b> (pod innym klockiem), do <b>jamy</b> klocka C
@@ -2529,10 +2564,19 @@
             <option value="calm">🌙 Spokojna</option>
             <option value="happy">😊 Wesoła</option>
             <option value="minecraft">⛏️ Minecraft (Sweden-styl)</option>
+            <option value="yt-sleep">😴 YouTube — „let go, you're safe tonight”</option>
           </select>
           <button onclick="musicPlay()" style="background:#22c55e; color:white; border:none; border-radius:6px; padding:4px 8px; cursor:pointer; font-size:12px;">▶️ Play</button>
-          <button onclick="musicStop()" style="background:#ef4444; color:white; border:none; border-radius:6px; padding:4px 8px; cursor:pointer; font-size:12px;">⏹️ Stop</button>
+          <button onclick="musicStop()" style="background:#ef4444; color:white; border:none; border-radius:6px; padding:4px 8px; cursor:pointer; font-size:12px;">⛹️ Stop</button>
         </div>
+        <!-- Odtwarzacz YouTube (IFrame API). Dźwięk leci z serwerów YouTube -
+             nie pobieramy pliku, więc licencja utworu pozostaje nienaruszona.
+             Kontener jest pusty do momentu wyboru utworu, więc nic się nie ładuje. -->
+        <div id="ytHost" style="max-width:560px; margin:10px auto 0; display:none;"></div>
+        <p id="ytNote" style="font-size:11px; color:#9ca3af; text-align:center; margin:6px 0 0; display:none;">
+          🔗 Źródło: <a href="https://www.youtube.com/watch?v=yzEEyPPbftU" target="_blank" rel="noopener">Chinatsu — „let go, you're safe tonight”</a>
+          (odsadzanie od 5:40). Dźwięk odtwarza YouTube.
+        </p>
       </div>
       <div id="leaderboard" class="hidden" style="margin-top:20px; border:1px solid #e5e7eb; border-radius:12px; padding:16px; background:#fff;">
         <h4 style="margin:0 0 12px;">🏆 Tablica wyników <span style="font-size:11px; color:#9ca3af; font-weight:400;">(tylko admin)</span></h4>
@@ -3797,6 +3841,7 @@
   const FROG_MIN_ROWS = 8, FROG_MAX_ROWS = 40;
   const FROG_MIN_BOTS = 0, FROG_MAX_BOTS = 7;
   const FROG_FOOD_MIN = 0, FROG_FOOD_MAX = 200;
+  const FROG_STOP_COLOR = '#e11d48';    // liść STOP na mapie z edytora
 
   // z jednego koloru lilii robimy parę odcieni, bo rysowanie używa dwóch:
   // pad[0] cień i pad[1] jasny środek. Dzięki temu wybór koloru w edytorze
@@ -3828,16 +3873,30 @@
     o.spawns = frogFixBank(o.spawns, o.cols, 1);
     o.goals = frogFixBank(o.goals, o.cols, Math.max(1, Math.floor(o.cols / 2) - 1));
     o.race = !!o.race;
-    o.foodPct = Math.min(FROG_FOOD_MAX, Math.max(FROG_FOOD_MIN, Math.round(Number(o.foodPct) || 0) || 100));
-    o.bots = Math.min(FROG_MAX_BOTS, Math.max(FROG_MIN_BOTS, Math.round(Number(o.bots) || 0)));
+    // 0 to dobra wartość (suchy staw, staw bez botów), więc liczymy inaczej niż
+    // przez "|| 100" — inaczej ustawienie 0% po cichu zamieniało się na 100%
+    o.foodPct = frogFixNum(o.foodPct, FROG_FOOD_MIN, FROG_FOOD_MAX, 100);
+    o.bots = frogFixNum(o.bots, FROG_MIN_BOTS, FROG_MAX_BOTS, 0);
     o.botNicks = frogFixNickList(o.botNicks, o.bots);
     o.padColor = /^#[0-9a-fA-F]{6}$/.test(o.padColor) ? o.padColor : '#5fb84a';
     o.pad = frogShades(o.padColor);
+    // stopPad MUSI tu być: rysowanie liścia STOP czyta map.stopPad[0]/[1], a bez
+    // tego pola gra na własnej mapie wywalała się przy pierwszym rysowaniu
+    // (każdy własny staw ma górny wiersz-ścianę = STOP, więc padało zawsze)
+    o.stopPad = frogShades(FROG_STOP_COLOR);
     o.pad1 = '#7fbf6a'; o.pad2 = '#a8d98f'; o.pad3 = '#35502c';
     o.shore = ['#86b45c', '#5b8340'];
     o.water = ['#14464a', '#1a6167', '#236f72'];
+    o.pattern = 'none'; o.density = 0;         // dziury są z edytora, nie z wzoru
+    o.food = 0;                                // jedzenie liczy się z foodPct
     o.emoji = '🪷';
     return o;
+  }
+  // liczba z zadanym zakresem i wartością zapasową; 0 zostaje 0
+  function frogFixNum(v, lo, hi, def) {
+    if (v === null || v === undefined || v === '') return def;
+    const n = Math.round(Number(v));
+    return Math.min(hi, Math.max(lo, Number.isFinite(n) ? n : def));
   }
   // lista kolumn na brzegu: unikalne, w zakresie, domyślnie środek
   function frogFixBank(list, cols, fallbackWidth) {
@@ -3900,6 +3959,14 @@
     for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) cells += FROG_CELL_PAD;
     return frogFixMap({ id: 'cm_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: 'Moja staw', cols, rows, cells });
   }
+  // przycisk „🆕 Nowa": wstawia świeżą mapę do edytora. Sam frogEdNew() tylko
+  // ją tworzy, więc bez tej funkcji kliknięcie niczego nie robiło.
+  function frogEdNewMap() {
+    frogEd = frogEdNew();
+    frogEdSyncControls();
+    frogEdDraw();
+    frogEdLog('🆕 Nowy staw — narysuj układ i zapisz.');
+  }
   function frogMapEditorOpen(map) {
     if (map && map.custom) frogEd = frogFixMap(JSON.parse(JSON.stringify(map)));
     else if (map && map.id) frogEd = frogFixMap({ cols: map.cols, rows: map.rows, name: 'Moja staw' });
@@ -3935,17 +4002,20 @@
       const n = Math.round(Number(val(id)));
       return Number.isFinite(n) ? Math.min(hi, Math.max(lo, n)) : def;
     };
+    // Wszystkie pola czytamy PRZED zmianą rozmiaru: frogEdResize() na końcu
+    // przerysowuje formularz, więc przy starym układzie kasował świeżo wpisane
+    // jedzenie, boty, kolor i nicki (i np. 0% jedzenia wracało do 100%).
     frogEd.name = String(val('frogEdName') || '').trim().slice(0, 24) || 'Moja staw';
-    const cols = num('frogEdCols', FROG_MIN_COLS, FROG_MAX_COLS, frogEd.cols);
-    const rows = num('frogEdRows', FROG_MIN_ROWS, FROG_MAX_ROWS, frogEd.rows);
-    if (cols !== frogEd.cols || rows !== frogEd.rows) frogEdResize(cols, rows);
     frogEd.padColor = /^#[0-9a-fA-F]{6}$/.test(val('frogEdPad')) ? val('frogEdPad') : frogEd.padColor;
-    frogEd.pad = frogShades(frogEd.padColor);
     frogEd.foodPct = num('frogEdFood', FROG_FOOD_MIN, FROG_FOOD_MAX, 100);
     frogEd.bots = num('frogEdBots', FROG_MIN_BOTS, FROG_MAX_BOTS, 3);
     frogEd.race = !!document.getElementById('frogEdRace')?.checked;
     const nicks = String(val('frogEdNicks') || '').split(',').map(s => s.trim().slice(0, 12)).filter(Boolean);
     frogEd.botNicks = frogFixNickList(nicks, frogEd.bots);
+    frogEd.pad = frogShades(frogEd.padColor);
+    const cols = num('frogEdCols', FROG_MIN_COLS, FROG_MAX_COLS, frogEd.cols);
+    const rows = num('frogEdRows', FROG_MIN_ROWS, FROG_MAX_ROWS, frogEd.rows);
+    if (cols !== frogEd.cols || rows !== frogEd.rows) frogEdResize(cols, rows);
     if (document.getElementById('frogEdFoodVal')) document.getElementById('frogEdFoodVal').textContent = frogEd.foodPct + '%';
     if (document.getElementById('frogEdBotsVal')) document.getElementById('frogEdBotsVal').textContent = frogEd.bots;
   }
@@ -4009,12 +4079,15 @@
     }
     return false;
   }
-  function frogEdSave() {
+  // play = true zamyka edytor i od razu wpuszcza na staw (przycisk „Zapisz i graj”),
+  // bo edytor zajmuje cały ekran i bez tego nie da się na nim zagrać
+  function frogEdSave(play) {
     frogEdReadControls();
     const saved = frogSaveCustomMap(frogEd);
     frogEd = frogFixMap(JSON.parse(JSON.stringify(saved)));
     frogEdLog(`💾 Zapisano „<b>${escapeHtml(saved.name)}</b>”.`);
-    if (!frogEdCanWin(saved)) {
+    const winnable = frogEdCanWin(saved);
+    if (!winnable) {
       frogEdLog('⚠️ <b>Nie ma drogi do mety!</b> Lilie nie łączą startu z bramką — popraw układ, bo nikt nie wygra.');
     }
     frogMapId = saved.id;                              // od razu wybierz nową mapę
@@ -4024,13 +4097,86 @@
     frogRenderMapList();
     frogUpdateHud();
     frogDraw();
+    if (!play) return saved;
+    frogEdClose();
+    if (winnable) {
+      frogStart();
+      frogLog(`🪷 <b>${escapeHtml(saved.name)}</b> — twój staw!`);
+    } else {
+      frogOpenMenu('Staw zapisany, ale nie da się dojść do mety — popraw układ w edytorze.');
+      frogLog('⚠️ <b>Nie da się zagrać:</b> brak drogi z brzegu do mety. Otwórz edytor 🪷.');
+    }
+    return saved;
   }
   // kod = zwykły JSON, wklejany do textarea (schowek bywa zablokowany)
   function frogEdExport() {
     frogEdReadControls();
     const code = btoa(unescape(encodeURIComponent(JSON.stringify(frogEd))));
-    const t = prompt('Skopiuj kod mapy (wklej go u kolegi przez „Wklej kod”):', code);
-    if (t) frogEdLog(`📤 Kod ma <b>${code.length}</b> znaków.`);
+    // pokaż w polu zamiast w prompt(), który na telefonie bywa zablokowany
+    const box = document.getElementById('frogEdCode');
+    if (box) { box.value = code; frogEdCopyCode(); }
+    frogEdLog(`📤 Kod ma <b>${code.length}</b> znaków — skopiowany, wklej go koledze.`);
+  }
+  // Krótki, wklejalny kod stawu (bez całej mapy) - do szybkiego udostępniania.
+  // Pełny kod z przycisku "Kod" zostaje bez zmian.
+  function frogEdMakeCode() {
+    frogEdReadControls();
+    const m = frogEd;
+    const bit = (b) => (b ? '1' : '0');
+    const spawnBits = Array.from({ length: m.cols }, (_, c) => bit(m.spawns.includes(c))).join('');
+    const goalBits = Array.from({ length: m.cols }, (_, c) => bit(m.goals.includes(c))).join('');
+    // siatka: 'p'/'w'/'s' -> bezpieczne litery base36
+    const cells = m.cells.replace(/p/g, 'a').replace(/w/g, 'b').replace(/s/g, 'c');
+    const payload = [m.cols, m.rows, bit(m.race), m.bots, m.foodPct, spawnBits, goalBits, cells].join('.');
+    const code = 'STAW1-' + btoa(unescape(encodeURIComponent(payload)));
+    const box = document.getElementById('frogEdCode');
+    if (box) { box.value = code; box.select && box.select(); }
+    frogEdLog(`🔑 Kod stawu gotowy (<b>${code.length}</b> znaków). Skopiuj go i wyślij koledze.`);
+  }
+  function frogEdCopyCode() {
+    const box = document.getElementById('frogEdCode');
+    if (!box || !box.value) { frogEdLog('⚠️ Najpierw wygeneruj kod (🔑).'); return; }
+    const done = () => frogEdLog('📋 Kod skopiowany do schowka.');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(box.value).then(done, () => {
+        box.select();
+        frogEdLog('📋 Zaznaczono kod — skopiuj go ręcznie (Ctrl+C).');
+      });
+    } else {
+      box.select();
+      try { document.execCommand('copy'); done(); }
+      catch (e) { frogEdLog('📋 Zaznaczono kod — skopiuj go ręcznie (Ctrl+C).'); }
+    }
+  }
+  function frogEdLoadCode() {
+    const box = document.getElementById('frogEdCodeIn');
+    const code = String(box ? box.value : '').trim();
+    if (!code) { frogEdLog('⚠️ Wklej najpierw kod stawu.'); return; }
+    try {
+      const raw = decodeURIComponent(escape(atob(code.replace(/^STAW1-/, ''))));
+      const p = raw.split('.');
+      if (p.length !== 8) throw new Error('zły format');
+      const cols = Number(p[0]), rows = Number(p[1]);
+      if (!(cols >= FROG_MIN_COLS && cols <= FROG_MAX_COLS && rows >= FROG_MIN_ROWS && rows <= FROG_MAX_ROWS)) throw new Error('zły rozmiar');
+      const cells = p[7].replace(/a/g, 'p').replace(/b/g, 'w').replace(/c/g, 's');
+      if (cells.length !== cols * rows) throw new Error('zła siatka');
+      const spawns = [], goals = [];
+      for (let c = 0; c < cols; c++) {
+        if (p[5][c] === '1') spawns.push(c);
+        if (p[6][c] === '1') goals.push(c);
+      }
+      frogEd = frogFixMap({
+        cols, rows, cells, spawns, goals,
+        race: p[2] === '1', bots: Number(p[3]), foodPct: Number(p[4]),
+        name: 'Staw z kodu'
+      });
+      frogEdSyncControls();
+      frogEdDraw();
+      frogEdLog(`📥 Wczytano staw z kodu — <b>${cols}×${rows}</b>, startów: ${spawns.length}.`);
+      if (box) box.value = '';
+    } catch (e) {
+      frogEdLog('⚠️ Ten kod nie jest stawem. Sprawdź, czy nie urwał się w połowie.');
+    }
   }
   function frogEdImport() {
     const code = prompt('Wklej kod mapy:');
@@ -4082,14 +4228,35 @@
     ctx.fillStyle = 'rgba(0,0,0,0.3)';
     ctx.fillRect(g.ox, g.oy - 8, g.w, 1.5);
     ctx.fillRect(g.ox, g.oy + g.h + 6, g.w, 1.5);
+    // START - dolny brzeg. Bez podświetlenia całego pasa i napisu
+    // punkt startu był ledwie widoczną zieloną kreską.
+    const startY = g.oy + g.h;
+    ctx.fillStyle = 'rgba(34, 197, 94, 0.18)';
+    ctx.fillRect(g.ox, startY, g.w, 7);
     m.spawns.forEach(c => {
       ctx.fillStyle = '#22c55e';
-      ctx.fillRect(g.ox + c * g.step, g.oy + g.h + 1, g.step, 5);
+      ctx.fillRect(g.ox + c * g.step, startY + 1, g.step, 5);
     });
+    // META - górna ściana
+    ctx.fillStyle = 'rgba(74, 222, 128, 0.18)';
+    ctx.fillRect(g.ox, g.oy - 7, g.w, 7);
     m.goals.forEach(c => {
       ctx.fillStyle = '#4ade80';
       ctx.fillRect(g.ox + c * g.step, g.oy - 6, g.step, 5);
     });
+    // napisy START i META - czytelne przy każdej wielkości siatki
+    ctx.font = 'bold 11px system-ui, sans-serif';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
+    const mark = (txt, y, col) => {
+      const tw = ctx.measureText(txt).width;
+      ctx.fillStyle = col;
+      ctx.fillRect(g.ox, y - 7, tw + 8, 14);
+      ctx.fillStyle = '#04211c';
+      ctx.fillText(txt, g.ox + 4, y);
+    };
+    mark('🐸 START', startY + 15, '#22c55e');
+    mark('🏁 META', g.oy - 14, '#4ade80');
     for (let r = 0; r < m.rows; r++) {
       for (let c = 0; c < m.cols; c++) {
         const x = g.ox + c * g.step, y = g.oy + r * g.step;
@@ -4685,6 +4852,17 @@
     frogMapId = frogAllMaps().some(m => m.id === saved) ? saved : FROG_MAPS[0].id;
     frogApplyMap();
   }
+  // Szybkie przełączanie stawów bez wchodzenia do menu - przycisk "Przełącz staw"
+  // cykluje po wszystkich dostępnych stawach (wbudowane + własne + wspólny).
+  function frogSwitchPond() {
+    const all = frogAllMaps();
+    if (all.length < 2) { frogLog('Jest tylko jeden staw — żeby dodać kolejny, otwórz edytor 🪷.'); return; }
+    const i = all.findIndex(m => m.id === frogMapId);
+    const next = all[(i + 1) % all.length];
+    frogSfx('land');
+    frogMapSelect(next.id);
+    frogLog('🔀 Staw: ' + next.emoji + ' ' + next.name);
+  }
   // --- kamera ---
   function frogCamMaxX() { return Math.max(0, frogWorldW() - FROG_VIEW_W); }
   function frogCamMaxY() { return Math.max(0, frogWorldH() - FROG_VIEW_H); }
@@ -5208,7 +5386,7 @@
     frog.best = Math.max(frog.best || 0, done);
     frogLevel++;
     frogGenHoles();                                // kolejny poziom = nowy układ dziur
-    frog.col = Math.floor(FROG_COLS / 2);
+    frog.col = frogSpawnCol(0);                     // zawsze na własnym punkcie startu
     frog.row = frogStartRow();
     frog.x = frogPadX(frog.col);
     frog.y = frogPadY(frog.row);
@@ -6163,8 +6341,10 @@
     ctx.arc(0, 0, FROG_R, na + cut, na + Math.PI * 2 - cut);
     ctx.closePath();
     const pg = ctx.createRadialGradient(-FROG_R * 0.3, -FROG_R * 0.3, 2, 0, 0, FROG_R);
-    if (stop) { pg.addColorStop(0, map.stopPad[0]); pg.addColorStop(1, map.stopPad[1]); }
-    else { pg.addColorStop(0, map.pad[0]); pg.addColorStop(1, map.pad[1]); }
+    // stopPad trzymamy w tablicy dwóch odcieni; gdyby jej zabrakło (mapa stara,
+    // z kodu, z pokoju), rysujemy liście zwykłym kolorem — lepiej brzydko niż wyjątek
+    const shades = stop ? (map.stopPad || map.pad) : map.pad;
+    pg.addColorStop(0, shades[0]); pg.addColorStop(1, shades[1]);
     ctx.fillStyle = pg;
     ctx.fill();
     ctx.strokeStyle = 'rgba(6,78,59,0.55)';
@@ -7672,10 +7852,24 @@
   let musicIdx = 0;
   function changeMusicType(t){
     currentMusicType = t;
+    // przy zmianie na YouTube trzeba zatrzymać syntezator i odwrotnie
+    if(t !== 'yt-sleep'){
+      // czyścimy zawsze, także gdy API jeszcze się nie doczytało - inaczej
+      // po wybraniu YT i powrocie do syntezatora zostawał pusty kontener
+      if(ytPlayer){ try{ ytPlayer.stopVideo(); }catch{} }
+      ytPlayer = null;
+      const host = document.getElementById('ytHost');
+      if(host){ host.style.display = 'none'; host.innerHTML = ''; }
+      const note = document.getElementById('ytNote');
+      if(note) note.style.display = 'none';
+    }
+    if(t === 'yt-sleep'){ musicStop(); return; }
     if(musicPlaying){ musicStop(); setTimeout(musicPlay, 100); }
   }
   function musicPlay(){
     if(musicPlaying) return;
+    // wybrany utwór YouTube -> ich własny odtwarzacz, bez syntezatora
+    if(currentMusicType === 'yt-sleep'){ ytSleepPlay(); return; }
     try{
       musicCtx = new (window.AudioContext || window.webkitAudioContext)();
       musicGain = musicCtx.createGain(); musicGain.gain.value = 0.12; musicGain.connect(musicCtx.destination);
@@ -7706,12 +7900,85 @@
     if(musicOsc) try{ musicOsc.stop(); }catch{}
     if(musicCtx) try{ musicCtx.close(); }catch{}
     musicCtx = null; musicOsc = null;
+    // zatrzymaj też odtwarzacz YouTube, bo on sam nie jest częścią syntezatora
+    if(ytPlayer){ try{ ytPlayer.stopVideo(); }catch{} }
     const audio = document.getElementById('bgMusic');
     if(audio){ audio.pause(); audio.currentTime = 0; }
     const btn = document.getElementById('musicPlayBtn');
     if(btn) btn.textContent = "🎵 Muzyka";
     const gs = document.getElementById('gameMusicStatus');
     if(gs) gs.textContent = "🔇 Muzyka zatrzymana";
+  }
+
+  // --- MUZYKA Z YOUTUBE (IFrame API) -----------------------------------------
+  // Świadomie NIE pobieramy pliku audio. Strumień odtwarza YouTube we własnym
+  // odtwarzaczu, więc licencja utworu nie jest naruszana. Link dał krótki
+  // prefiks do osadzenia: bez listy RD i start_radio, bo to warianty radia.
+  const YT_SLEEP_VIDEO = 'yzEEyPPbftU';
+  const YT_SLEEP_START = 340;                 // t=340s z linku
+  let ytPlayer = null, ytApiLoading = false, ytApiFailed = false;
+
+  function ytSleepPlay(){
+    const host = document.getElementById('ytHost');
+    const gs = document.getElementById('gameMusicStatus');
+    if(!host) return;
+    host.style.display = 'block';
+    const note = document.getElementById('ytNote');
+    if(note) note.style.display = 'block';
+    // ładujemy API tylko przy pierwszym użyciu - nie pchamy go na start
+    if(window.YT && typeof window.YT.Player === 'function'){ ytSleepMount(); return; }
+    if(ytApiFailed){
+      if(gs) gs.textContent = "⚠️ YouTube niedostępny (offline lub blokada)";
+      return;
+    }
+    if(!ytApiLoading){
+      ytApiLoading = true;
+      window.onYouTubeIframeAPIReady = () => { ytApiLoading = false; ytSleepMount(); };
+      const s = document.createElement('script');
+      s.src = 'https://www.youtube.com/iframe_api';
+      s.onerror = () => { ytApiLoading = false; ytApiFailed = true; };
+      document.head.appendChild(s);
+    }
+    if(gs) gs.textContent = "⏳ Ładuję odtwarzacz YouTube…";
+  }
+  function ytSleepMount(){
+    const host = document.getElementById('ytHost');
+    if(!host) return;
+    host.innerHTML = '';
+    const holder = document.createElement('div');
+    holder.id = 'ytPlayer';
+    host.appendChild(holder);
+    try{
+      ytPlayer = new window.YT.Player('ytPlayer', {
+        videoId: YT_SLEEP_VIDEO,
+        playerVars: { start: YT_SLEEP_START, playsinline: 1, rel: 0, modestbranding: 1 },
+        events: {
+          onReady: (e) => {
+            musicPlaying = true;
+            e.target.playVideo();
+            const gs = document.getElementById('gameMusicStatus');
+            if(gs) gs.textContent = "😴 YouTube gra (Chinatsu)";
+          },
+          onStateChange: (e) => {
+            // film się skończył - nie zostawiamy stanu "gra"
+            if(e.data === window.YT.PlayerState.ENDED){
+              musicPlaying = false;
+              const gs = document.getElementById('gameMusicStatus');
+              if(gs) gs.textContent = "🔇 Film się skończył";
+            }
+          },
+          onError: () => {
+            musicPlaying = false;
+            const gs = document.getElementById('gameMusicStatus');
+            if(gs) gs.textContent = "⚠️ YouTube nie odtworzy tego filmu";
+          }
+        }
+      });
+    }catch(e){
+      ytPlayer = null;
+      const gs = document.getElementById('gameMusicStatus');
+      if(gs) gs.textContent = "⚠️ Odtwarzacz YouTube nie wystartował";
+    }
   }
 
   // pomiń animację na kliknięcie w tło (opcjonalnie)
@@ -7931,9 +8198,38 @@
     spikeModel.ports[port] = spikeModel.ports[port] === dev ? null : dev;
     spikeModelChanged();
   }
+  // Podpięte elementy pokazane też przy zakładce Klocki - bez tego nie widać,
+  // że np. czujnik odległości nie jest wpięty i program nic nie zmierzy.
+  function spikeRenderMounted() {
+    const box = document.getElementById('spikeMounted');
+    if (!box) return;
+    box.innerHTML = '';
+    const t = document.createElement('span');
+    t.className = 'spike-mounted-t';
+    t.textContent = 'Elementy';
+    box.appendChild(t);
+    let any = false;
+    for (const p of SPIKE_PORTS) {
+      const key = spikeModel.ports[p];
+      const dev = key ? SPIKE_DEVICES[key] : null;
+      any = any || !!dev;
+      const chip = document.createElement('span');
+      chip.className = 'spike-chip' + (dev ? '' : ' empty');
+      chip.title = dev ? p + ' — ' + dev.name : p + ' — wolny';
+      chip.innerHTML = '<b>' + p + '</b>' + (dev ? dev.icon + ' ' + dev.name : '—');
+      box.appendChild(chip);
+    }
+    if (!any) {
+      const warn = document.createElement('span');
+      warn.style.color = '#b45309';
+      warn.textContent = '⚠ nic nie podpięte — program nie zmierzy';
+      box.appendChild(warn);
+    }
+  }
   function spikeModelChanged() {
     spikeLocalSet(SPIKE_MODEL_KEY, spikeModel);
     spikeRenderParts();
+    spikeRenderMounted();
     spikeReset();
   }
 
@@ -9334,6 +9630,7 @@
     if (!spikeWalls.length) spikeDefaultArena();
     spikeLoad();
     spikeRenderParts();
+    spikeRenderMounted();
     spikeRenderPalette();
     spikeRenderWorkspace();
     spikeReset();
